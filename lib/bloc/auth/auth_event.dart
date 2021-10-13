@@ -1,4 +1,3 @@
-import 'package:equatable/equatable.dart';
 import 'package:flutter_btmnavbar/models/user.dart';
 
 abstract class AuthEvent {
