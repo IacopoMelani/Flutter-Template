@@ -29,8 +29,8 @@ dependencies:
   cupertino_icons: ^0.1.3
   adaptive_theme: ^2.2.0
   shared_preferences: ^2.0.8
-  bloc: ^6.0.3
-  flutter_bloc: ^6.0.6
+  bloc: ^7.2.1
+  flutter_bloc: ^7.3.0
 
 dev_dependencies:
   flutter_test:

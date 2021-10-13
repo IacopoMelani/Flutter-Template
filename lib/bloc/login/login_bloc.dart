@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter_btmnavbar/bloc/auth/auth_bloc.dart';
+import 'package:flutter_btmnavbar/bloc/auth/auth_event.dart';
 import 'package:flutter_btmnavbar/bloc/login/login_event.dart';
 import 'package:flutter_btmnavbar/bloc/login/login_state.dart';
 import 'package:flutter_btmnavbar/exceptions/auth_exception.dart';
@@ -24,6 +25,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     try {
       final user = await _authService.signInWithEmailAndPassword(event.email, event.password);
       if (user != null) {
+        _authBloc.add(UserLoggedInAuthEvent(user: user));
         yield LoginSuccessState();
         yield LoginInitialState();
       } else {

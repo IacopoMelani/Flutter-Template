@@ -10,15 +10,15 @@ abstract class AuthService {
 class FakeAuthenticationService extends AuthService {
   @override
   Future<User?> getCurrentUser() async {
-    return User(name: 'Test User', email: "test@domain.com");
+    return null;
   }
 
   @override
   Future<User?> signInWithEmailAndPassword(String email, String password) async {
-    await Future.delayed(Duration(seconds: 1)); // simulate a network delay
+    await Future.delayed(Duration(seconds: 1));
 
-    if (email.toLowerCase() != 'test@domain.com' || password != 'testpass123') {
-      throw AuthenticationException(message: 'Wrong username or password');
+    if (email.toLowerCase() != 'test@domain.com' || password != '123456') {
+      throw AuthenticationException(message: 'Email o password errati');
     }
     return User(name: 'Test User', email: email);
   }

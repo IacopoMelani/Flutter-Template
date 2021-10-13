@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_btmnavbar/bloc/auth/auth_bloc.dart';
-import 'package:flutter_btmnavbar/bloc/auth/auth_event.dart';
 import 'package:flutter_btmnavbar/bloc/auth/auth_state.dart';
-import 'package:flutter_btmnavbar/main.dart';
-import 'package:flutter_btmnavbar/views/main_view.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_btmnavbar/bloc/login/login_bloc.dart';
+import 'package:flutter_btmnavbar/bloc/login/login_event.dart';
+import 'package:flutter_btmnavbar/bloc/login/login_state.dart';
+import 'package:flutter_btmnavbar/mixins/snackbar.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
@@ -14,34 +14,18 @@ class LoginView extends StatefulWidget {
   _LoginViewState createState() => _LoginViewState();
 }
 
-class _LoginViewState extends State<LoginView> {
-  final _emailTextFieldKey = GlobalKey();
-  final _passwordTextFieldKey = GlobalKey();
-
-  String email = "";
-  String password = "";
-
+class _LoginViewState extends State<LoginView> with MySnackBar {
   @override
   Widget build(BuildContext context) => Scaffold(
-        body: SingleChildScrollView(
+        body: SafeArea(
           child: BlocBuilder<AuthBloc, AuthState>(
             builder: (context, state) {
-              final authBloc = BlocProvider.of<AuthBloc>(context);
               if (state is AuthNotAuthenticatedState) {
-                return _buildAuthForm(context);
+                return _AuthForm();
               }
               if (state is AuthFailureState) {
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(state.message),
-                    ElevatedButton(
-                      onPressed: _retryPressed(authBloc),
-                      child: Text("Retry"),
-                    ),
-                  ],
-                );
+                showError(state.message);
+                return _AuthForm();
               }
               return Center(
                 child: CircularProgressIndicator(
@@ -52,150 +36,141 @@ class _LoginViewState extends State<LoginView> {
           ),
         ),
       );
+}
 
-  Widget _buildAuthForm(BuildContext context) => Form(
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(top: 60.0),
-              child: Center(
-                child: Container(
-                  width: 200,
-                  height: 150,
-                  child: Image.asset('assets/idflag.png'),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                left: 50.0,
-                right: 50.0,
-                top: 30.0,
-                bottom: 0,
-              ),
-              child: TextField(
-                key: _emailTextFieldKey,
-                onChanged: (value) => email = value,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Email',
-                  hintText: 'Enter valid email id as abc@gmail.com',
-                ),
-                autofocus: true,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                left: 50.0,
-                right: 50.0,
-                top: 25.0,
-                bottom: 0,
-              ),
-              child: TextField(
-                key: _passwordTextFieldKey,
-                onChanged: (value) => password = value,
-                obscureText: true,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Password',
-                  hintText: 'Enter secure password',
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 45,
-            ),
-            Container(
-              height: 45,
-              width: 110,
-              child: ElevatedButton(
-                onPressed: _goToMainView,
-                child: Text(
-                  'Login',
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
-
-  _buildSignInForm(BuildContext context) => Form(
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(top: 60.0),
-              child: Center(
-                child: Container(
-                  width: 200,
-                  height: 150,
-                  child: Image.asset('assets/idflag.png'),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                left: 50.0,
-                right: 50.0,
-                top: 30.0,
-                bottom: 0,
-              ),
-              child: TextField(
-                key: _emailTextFieldKey,
-                onChanged: (value) => email = value,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Email',
-                  hintText: 'Enter valid email id as abc@gmail.com',
-                ),
-                autofocus: true,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                left: 50.0,
-                right: 50.0,
-                top: 25.0,
-                bottom: 0,
-              ),
-              child: TextField(
-                key: _passwordTextFieldKey,
-                onChanged: (value) => password = value,
-                obscureText: true,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Password',
-                  hintText: 'Enter secure password',
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 45,
-            ),
-            Container(
-              height: 45,
-              width: 110,
-              child: ElevatedButton(
-                onPressed: _goToMainView,
-                child: Text(
-                  'Login',
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
-
-  _retryPressed(AuthBloc authBloc) async {
-    authBloc.add(AppLoadedAuthEvent());
+class _AuthForm extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.center,
+      child: _SignInForm(),
+    );
   }
+}
 
-  _goToMainView() async {
-    (await SharedPreferences.getInstance()).setBool("loggedIn", true);
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => MainView(),
+class _SignInForm extends StatefulWidget {
+  const _SignInForm({Key? key}) : super(key: key);
+
+  @override
+  _SignInFormState createState() => _SignInFormState();
+}
+
+class _SignInFormState extends State<_SignInForm> with MySnackBar {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  bool _autoValidate = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<LoginBloc, LoginState>(
+      listener: (context, state) {
+        if (state is LoginFailureState) {
+          showError(state.error);
+        }
+      },
+      child: BlocBuilder<LoginBloc, LoginState>(
+        builder: (context, state) {
+          if (state is LoginLoadingState) {
+            return Center(
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+              ),
+            );
+          }
+          return _buildAuthForm();
+        },
       ),
     );
+  }
+
+  Widget _buildAuthForm() {
+    _emailController.text = "test@domain.com";
+    _passwordController.text = "123456";
+    return Form(
+      key: _formKey,
+      autovalidateMode: _autoValidate ? AutovalidateMode.always : AutovalidateMode.disabled,
+      child: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(top: 60.0),
+            child: Center(
+              child: Container(
+                width: 200,
+                height: 150,
+                child: Image.asset('assets/idflag.png'),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 50.0,
+              right: 50.0,
+              top: 30.0,
+              bottom: 0,
+            ),
+            child: TextFormField(
+              autofocus: true,
+              controller: _emailController,
+              keyboardType: TextInputType.emailAddress,
+              autocorrect: false,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Email',
+                hintText: 'Enter valid email id as abc@gmail.com',
+              ),
+              validator: (value) => value == null ? 'La mail è obbligatoria' : null,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 50.0,
+              right: 50.0,
+              top: 25.0,
+              bottom: 0,
+            ),
+            child: TextFormField(
+              controller: _passwordController,
+              obscureText: true,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Password',
+                hintText: 'Enter secure password',
+              ),
+              validator: (value) => value == null ? 'la password è obbligatoria' : null,
+            ),
+          ),
+          SizedBox(
+            height: 45,
+          ),
+          Container(
+            height: 45,
+            width: 110,
+            child: ElevatedButton(
+              onPressed: _onLoginButtonPressed,
+              child: Text(
+                'Login',
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  _onLoginButtonPressed() {
+    final LoginState state = BlocProvider.of<LoginBloc>(context).state;
+    if (state is LoginLoadingState) {
+      return;
+    }
+    final loginBloc = BlocProvider.of<LoginBloc>(context);
+
+    if (_formKey.currentState!.validate()) {
+      loginBloc.add(LoginWithEmailButtonPressedEvent(email: _emailController.text, password: _passwordController.text));
+    } else {
+      setState(() {
+        _autoValidate = true;
+      });
+    }
   }
 }

@@ -7,7 +7,7 @@ import 'package:flutter_btmnavbar/widgets/navigations/page_view_widget.dart';
 import 'pages/home_view.dart' as homeView;
 import 'pages/search_view.dart' as _searchView;
 import 'pages/bookmark_view.dart' as bookmarkView;
-import 'pages/setting_view.dart' as SettingsView;
+import 'pages/settings_view.dart' as SettingsView;
 
 //Main view
 class MainView extends StatefulWidget {

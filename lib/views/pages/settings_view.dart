@@ -1,7 +1,10 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_btmnavbar/views/pages/login_view.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_btmnavbar/bloc/auth/auth_bloc.dart';
+import 'package:flutter_btmnavbar/bloc/logout/logout_bloc.dart';
+import 'package:flutter_btmnavbar/bloc/logout/logout_event.dart';
+import 'package:flutter_btmnavbar/bloc/logout/logout_state.dart';
 
 class Settings extends StatefulWidget {
   const Settings({Key? key}) : super(key: key);
@@ -39,10 +42,17 @@ class _SettingsState extends State<Settings> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ElevatedButton(
-                    onPressed: _logout,
-                    child: Text('Logout'),
-                  )
+                  BlocProvider<LogoutBloc>(
+                    create: (context) => LogoutBloc(
+                      BlocProvider.of<AuthBloc>(context),
+                    ),
+                    child: BlocBuilder<LogoutBloc, LogoutState>(
+                      builder: (context, state) => ElevatedButton(
+                        onPressed: state is LogoutLoadingState ? null : _logout,
+                        child: Text('Logout'),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ],
@@ -51,12 +61,11 @@ class _SettingsState extends State<Settings> {
       );
 
   void _logout() async {
-    (await SharedPreferences.getInstance()).setBool("loggedIn", false);
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => LoginView(),
-      ),
-    );
+    final state = BlocProvider.of<LogoutBloc>(context).state;
+    if (state is LogoutLoadingState) {
+      return;
+    }
+    final logoutBloc = BlocProvider.of<LogoutBloc>(context);
+    logoutBloc.add(LogoutPressedEvent());
   }
 }
