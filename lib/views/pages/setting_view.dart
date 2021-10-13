@@ -1,5 +1,7 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_btmnavbar/views/pages/login_view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Settings extends StatefulWidget {
   const Settings({Key? key}) : super(key: key);
@@ -33,9 +35,28 @@ class _SettingsState extends State<Settings> {
                   Text('Theme mode: '),
                   Text(AdaptiveTheme.of(context).mode.name),
                 ],
-              )
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: _logout,
+                    child: Text('Logout'),
+                  )
+                ],
+              ),
             ],
           ),
         ),
       );
+
+  void _logout() async {
+    (await SharedPreferences.getInstance()).setBool("loggedIn", false);
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => LoginView(),
+      ),
+    );
+  }
 }
