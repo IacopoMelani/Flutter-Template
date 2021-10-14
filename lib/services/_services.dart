@@ -28,8 +28,16 @@ abstract class HttpService {
 
   Uri buildEndPoint(String path) => Uri.parse('$baseUrl/$path');
 
+  /// The method [makeJsonPostRequest] is used to make a post request to the server
+  /// [path] is the path to the endpoint
+  /// [body] is the body of the request
+  /// [headers] is the headers of the request
+  /// Returns a [Future] of [JsonMap] if the request was successful
+  /// Throws [HttpServiceException] if the request was failed
   Future<JsonMap> makeJsonPostRequest(String path, {Map<String, dynamic>? body, Map<String, String>? headers}) async {
     final url = buildEndPoint(path);
+    headers ??= {};
+    headers['Content-Type'] = 'application/json';
     final response = await http.post(url, body: body, headers: headers);
     return _checkHttpCode(response);
   }
@@ -39,11 +47,11 @@ abstract class HttpService {
     if (successHttpCodes.contains(httpCode)) {
       return json.decode(res.body);
     } else if (redirectHttpCodes.contains(httpCode)) {
-      throw HttpServiceRedirectException();
+      throw HttpServiceRedirectException(httpCode: httpCode, message: res.body);
     } else if (clientErrorHttpCodes.contains(httpCode)) {
-      throw HttpServiceClientErrorException();
+      throw HttpServiceClientErrorException(httpCode: httpCode, message: res.body);
     } else {
-      throw HttpServiceServerErrorException();
+      throw HttpServiceServerErrorException(httpCode: httpCode, message: res.body);
     }
   }
 }

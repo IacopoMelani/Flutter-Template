@@ -1,17 +1,15 @@
-class HttpServiceRedirectException implements Exception {
-  final String message;
-
-  HttpServiceRedirectException({this.message = "An error occurring"});
+class HttpServiceException implements Exception {
+  HttpServiceException({required int httpCode, String? message = "An error occurring"});
 }
 
-class HttpServiceClientErrorException implements Exception {
-  final String message;
-
-  HttpServiceClientErrorException({this.message = "An error occurring"});
+class HttpServiceRedirectException extends HttpServiceException {
+  HttpServiceRedirectException({required int httpCode, String? message}) : super(httpCode: httpCode, message: message);
 }
 
-class HttpServiceServerErrorException implements Exception {
-  final String message;
+class HttpServiceClientErrorException extends HttpServiceException {
+  HttpServiceClientErrorException({required int httpCode, String? message}) : super(httpCode: httpCode, message: message);
+}
 
-  HttpServiceServerErrorException({this.message = "An error occurring"});
+class HttpServiceServerErrorException extends HttpServiceException {
+  HttpServiceServerErrorException({required int httpCode, String? message}) : super(httpCode: httpCode, message: message);
 }
