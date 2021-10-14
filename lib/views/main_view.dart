@@ -38,15 +38,15 @@ class _MainViewState extends State<MainView> {
     new SettingsView.Settings(),
   ];
 
-  Widget build(BuildContext ctx) {
-    return Scaffold(
-      appBar: _buildAppBar(),
-      body: _buildPageView(),
-      bottomNavigationBar: _buildBottomAppBar(),
-      floatingActionButton: _buildFloatingActionButton(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-    );
-  }
+  Widget build(BuildContext ctx) => SafeArea(
+        child: Scaffold(
+          appBar: _buildAppBar(),
+          body: _buildPageView(),
+          bottomNavigationBar: _buildBottomAppBar(),
+          floatingActionButton: _buildFloatingActionButton(),
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        ),
+      );
 
   // MARK: privates
 

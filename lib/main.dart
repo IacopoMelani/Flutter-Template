@@ -5,42 +5,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_btmnavbar/bloc/auth/auth_bloc.dart';
-import 'package:flutter_btmnavbar/bloc/auth/auth_event.dart';
 import 'package:flutter_btmnavbar/bloc/auth/auth_state.dart';
-import 'package:flutter_btmnavbar/bloc/login/login_bloc.dart';
-import 'package:flutter_btmnavbar/bloc/logout/logout_bloc.dart';
-import 'package:flutter_btmnavbar/services/auth_services.dart';
+import 'package:flutter_btmnavbar/providers/bloc_providers.dart';
+import 'package:flutter_btmnavbar/providers/service_providers.dart';
 import 'package:flutter_btmnavbar/styles/color.dart';
 import 'package:flutter_btmnavbar/views/main_view.dart';
 import 'package:flutter_btmnavbar/views/pages/login_view.dart';
 
 void main() => runApp(
       MultiRepositoryProvider(
-        providers: [
-          RepositoryProvider<AuthService>(
-            create: (context) => FakeAuthenticationService(),
-          ),
-        ],
+        providers: ServiceProviders().providers,
         child: MultiBlocProvider(
-          providers: [
-            BlocProvider<AuthBloc>(
-              create: (context) => AuthBloc(RepositoryProvider.of<AuthService>(context))
-                ..add(
-                  AppLoadedAuthEvent(),
-                ),
-            ),
-            BlocProvider<LoginBloc>(
-              create: (context) => LoginBloc(
-                BlocProvider.of<AuthBloc>(context),
-                RepositoryProvider.of<AuthService>(context),
-              ),
-            ),
-            BlocProvider<LogoutBloc>(
-              create: (context) => LogoutBloc(
-                BlocProvider.of<AuthBloc>(context),
-              ),
-            ),
-          ],
+          providers: BlocProviders().providers,
           child: App(),
         ),
       ),

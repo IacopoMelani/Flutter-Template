@@ -5,6 +5,7 @@ import 'package:flutter_btmnavbar/bloc/login/login_event.dart';
 import 'package:flutter_btmnavbar/bloc/login/login_state.dart';
 import 'package:flutter_btmnavbar/exceptions/auth_exception.dart';
 import 'package:flutter_btmnavbar/services/auth_services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final AuthBloc _authBloc;
@@ -26,6 +27,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       final user = await _authService.signInWithEmailAndPassword(event.email, event.password);
       if (user != null) {
         _authBloc.add(UserLoggedInAuthEvent(user: user));
+        (await SharedPreferences.getInstance()).setBool("isLoggedIn", true);
         yield LoginSuccessState();
         yield LoginInitialState();
       } else {

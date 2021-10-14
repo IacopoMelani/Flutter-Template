@@ -1,7 +1,6 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_btmnavbar/bloc/auth/auth_bloc.dart';
 import 'package:flutter_btmnavbar/bloc/logout/logout_bloc.dart';
 import 'package:flutter_btmnavbar/bloc/logout/logout_event.dart';
 import 'package:flutter_btmnavbar/bloc/logout/logout_state.dart';
@@ -42,17 +41,12 @@ class _SettingsState extends State<Settings> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  BlocProvider<LogoutBloc>(
-                    create: (context) => LogoutBloc(
-                      BlocProvider.of<AuthBloc>(context),
+                  BlocBuilder<LogoutBloc, LogoutState>(
+                    builder: (context, state) => ElevatedButton(
+                      onPressed: state is LogoutLoadingState ? null : _logout,
+                      child: Text('Logout'),
                     ),
-                    child: BlocBuilder<LogoutBloc, LogoutState>(
-                      builder: (context, state) => ElevatedButton(
-                        onPressed: state is LogoutLoadingState ? null : _logout,
-                        child: Text('Logout'),
-                      ),
-                    ),
-                  ),
+                  )
                 ],
               ),
             ],

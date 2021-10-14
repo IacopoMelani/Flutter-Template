@@ -6,6 +6,7 @@ import 'package:flutter_btmnavbar/bloc/login/login_bloc.dart';
 import 'package:flutter_btmnavbar/bloc/login/login_event.dart';
 import 'package:flutter_btmnavbar/bloc/login/login_state.dart';
 import 'package:flutter_btmnavbar/mixins/snackbar.dart';
+import 'package:flutter_btmnavbar/widgets/loadings/circular_progress_indicator.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
@@ -16,9 +17,9 @@ class LoginView extends StatefulWidget {
 
 class _LoginViewState extends State<LoginView> with MySnackBar {
   @override
-  Widget build(BuildContext context) => Scaffold(
-        body: SafeArea(
-          child: BlocBuilder<AuthBloc, AuthState>(
+  Widget build(BuildContext context) => SafeArea(
+        child: Scaffold(
+          body: BlocBuilder<AuthBloc, AuthState>(
             builder: (context, state) {
               if (state is AuthNotAuthenticatedState) {
                 return _AuthForm();
@@ -27,11 +28,7 @@ class _LoginViewState extends State<LoginView> with MySnackBar {
                 showError(state.message);
                 return _AuthForm();
               }
-              return Center(
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                ),
-              );
+              return MyCircularProgressIndicator();
             },
           ),
         ),
@@ -40,12 +37,10 @@ class _LoginViewState extends State<LoginView> with MySnackBar {
 
 class _AuthForm extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,
-      child: _SignInForm(),
-    );
-  }
+  Widget build(BuildContext context) => Container(
+        alignment: Alignment.topCenter,
+        child: _SignInForm(),
+      );
 }
 
 class _SignInForm extends StatefulWidget {
@@ -72,13 +67,11 @@ class _SignInFormState extends State<_SignInForm> with MySnackBar {
       child: BlocBuilder<LoginBloc, LoginState>(
         builder: (context, state) {
           if (state is LoginLoadingState) {
-            return Center(
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-              ),
-            );
+            return MyCircularProgressIndicator();
           }
-          return _buildAuthForm();
+          return SingleChildScrollView(
+            child: _buildAuthForm(),
+          );
         },
       ),
     );
@@ -152,6 +145,9 @@ class _SignInFormState extends State<_SignInForm> with MySnackBar {
                 'Login',
               ),
             ),
+          ),
+          SizedBox(
+            height: 16,
           ),
         ],
       ),
