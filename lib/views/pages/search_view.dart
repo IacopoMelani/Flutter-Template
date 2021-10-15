@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_btmnavbar/widgets/inputs/my_text_field.dart';
 
 class Search extends StatefulWidget {
   const Search({Key? key}) : super(key: key);
@@ -18,13 +19,10 @@ class _SearchState extends State<Search> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: 'Search',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
+              child: MyTextField(
+                labelText: "Search",
+                type: TextFieldType.search,
+                prefixIcon: Icon(Icons.search),
               ),
             ),
           ],

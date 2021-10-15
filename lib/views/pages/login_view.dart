@@ -7,6 +7,8 @@ import 'package:flutter_btmnavbar/bloc/login/login_event.dart';
 import 'package:flutter_btmnavbar/bloc/login/login_state.dart';
 import 'package:flutter_btmnavbar/mixins/snackbar.dart';
 import 'package:flutter_btmnavbar/services/auth_services.dart';
+import 'package:flutter_btmnavbar/styles/color.dart';
+import 'package:flutter_btmnavbar/widgets/inputs/my_text_field.dart';
 import 'package:flutter_btmnavbar/widgets/loadings/circular_progress_indicator.dart';
 
 class LoginView extends StatefulWidget {
@@ -56,6 +58,7 @@ class _SignInFormState extends State<_SignInForm> with MySnackBar {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _autoValidate = false;
+  bool _passwordVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -113,7 +116,6 @@ class _SignInFormState extends State<_SignInForm> with MySnackBar {
                 labelText: 'Email',
                 hintText: 'Enter valid email id as abc@gmail.com',
               ),
-              validator: (value) => value == null ? 'La mail è obbligatoria' : null,
             ),
           ),
           Padding(
@@ -123,16 +125,35 @@ class _SignInFormState extends State<_SignInForm> with MySnackBar {
               top: 25.0,
               bottom: 0,
             ),
-            child: TextFormField(
+            child: MyTextField(
+              labelText: 'Password',
               controller: _passwordController,
-              obscureText: true,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Password',
-                hintText: 'Enter secure password',
+              hintText: 'Enter password',
+              obscureText: !_passwordVisible,
+              suffixIcon: IconButton(
+                highlightColor: Colors.transparent,
+                splashColor: Colors.transparent,
+                hoverColor: Colors.transparent,
+                icon: Icon(
+                  _passwordVisible ? Icons.visibility : Icons.visibility_off,
+                  color: ColorApp.primaryColorLight,
+                ),
+                onPressed: () => setState(
+                  () {
+                    _passwordVisible = !_passwordVisible;
+                  },
+                ),
               ),
-              validator: (value) => value == null ? 'la password è obbligatoria' : null,
             ),
+// TextFormField(
+//               controller: _passwordController,
+//               obscureText: true,
+//               decoration: InputDecoration(
+//                 border: OutlineInputBorder(),
+//                 labelText: 'Password',
+//                 hintText: 'Enter secure password',
+//               ),
+//             ),
           ),
           SizedBox(
             height: 45,
