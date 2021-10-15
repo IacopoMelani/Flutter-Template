@@ -4,8 +4,7 @@ import 'package:yaml/yaml.dart';
 typedef YamlMap = Map<String, dynamic>;
 
 class ConfigManager {
-  static const String configFileName = "config.yaml";
-  static String configFileValue = "";
+  static const String configFilePath = "assets/config.yaml";
   static ConfigManager _singleton = ConfigManager._internal();
 
   dynamic _config;
@@ -14,10 +13,13 @@ class ConfigManager {
     return _singleton;
   }
 
-  ConfigManager._internal() {
-    rootBundle.loadString("assets/config.yaml").then((value) {
+  ConfigManager._internal();
+
+  Future<void> loadConfig() async {
+    if (_config == null) {
+      var value = await rootBundle.loadString(configFilePath);
       _config = loadYaml(value);
-    });
+    }
   }
 
   dynamic get defaultConfig => {
@@ -31,5 +33,5 @@ class ConfigManager {
 
   String get apiSchema => config["api"]["schema"] ?? "";
   String get apiHost => config["api"]["host"] ?? "";
-  String get apiPort => config["api"]["port"] ?? "";
+  int get apiPort => config["api"]["port"] ?? 0;
 }

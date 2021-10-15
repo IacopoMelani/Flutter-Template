@@ -31,7 +31,7 @@ typedef JsonArray = List<dynamic>;
 abstract class HttpService {
   String get schema;
   String get host;
-  String get port;
+  int get port;
 
   String get baseUrl => '$schema://$host:$port';
 

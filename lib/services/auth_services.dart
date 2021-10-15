@@ -10,12 +10,15 @@ abstract class AuthService extends HttpService {
   Future<void> signOut();
 }
 
+const FAKE_USER_EMAIL = "test@domain.com";
+const FAKE_USER_PASSWORD = "123456";
+
 class FakeAuthenticationService extends AuthService {
   @override
   String get host => "";
 
   @override
-  String get port => "";
+  int get port => 0;
 
   @override
   String get schema => "";
@@ -23,7 +26,7 @@ class FakeAuthenticationService extends AuthService {
   @override
   Future<User?> getCurrentUser() async {
     if ((await isLoggedIn())) {
-      return User(name: "Test User", email: "test@domain.com");
+      return User(name: "Test User", email: FAKE_USER_EMAIL);
     }
     return null;
   }
@@ -37,7 +40,7 @@ class FakeAuthenticationService extends AuthService {
   Future<User?> signInWithEmailAndPassword(String email, String password) async {
     await Future.delayed(Duration(seconds: 1));
 
-    if (email.toLowerCase() != 'test@domain.com' || password != '123456') {
+    if (email.toLowerCase() != FAKE_USER_EMAIL || password != FAKE_USER_PASSWORD) {
       throw AuthenticationException(message: 'Email o password errati');
     }
     return User(name: 'Test User', email: email);

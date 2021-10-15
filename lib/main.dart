@@ -6,12 +6,15 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_btmnavbar/bloc/auth/auth_bloc.dart';
 import 'package:flutter_btmnavbar/bloc/auth/auth_state.dart';
+import 'package:flutter_btmnavbar/bloc/config/config_bloc.dart';
+import 'package:flutter_btmnavbar/bloc/config/config_state.dart';
 import 'package:flutter_btmnavbar/providers/bloc_providers.dart';
 import 'package:flutter_btmnavbar/providers/manager_providers.dart';
 import 'package:flutter_btmnavbar/providers/service_providers.dart';
 import 'package:flutter_btmnavbar/styles/color.dart';
 import 'package:flutter_btmnavbar/views/main_view.dart';
 import 'package:flutter_btmnavbar/views/pages/login_view.dart';
+import 'package:flutter_btmnavbar/widgets/loadings/circular_progress_indicator.dart';
 
 void main() {
   runApp(
@@ -53,16 +56,26 @@ class _AppState extends State<App> {
         title: appTitle,
         theme: light,
         darkTheme: dark,
-        home: BlocBuilder<AuthBloc, AuthState>(
-          builder: (context, state) {
-            if (state is AuthAuthenticatedState) {
-              return MainView();
-            } else {
-              return LoginView();
-            }
-          },
-        ),
+        home: _buildRoot(context),
       ),
     );
   }
+
+  Widget _buildRoot(BuildContext context) => BlocBuilder<ConfigBloc, ConfigState>(
+        builder: (context, configState) {
+          if (configState is ConfigLoadedState) {
+            return BlocBuilder<AuthBloc, AuthState>(
+              builder: (context, state) {
+                if (state is AuthAuthenticatedState) {
+                  return MainView();
+                } else {
+                  return LoginView();
+                }
+              },
+            );
+          } else {
+            return MyCircularProgressIndicator();
+          }
+        },
+      );
 }

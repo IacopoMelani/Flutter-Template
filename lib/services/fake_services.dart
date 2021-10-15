@@ -26,7 +26,7 @@ class FakeService extends HttpService {
   String get host => ConfigManager().apiHost;
 
   @override
-  String get port => ConfigManager().apiPort;
+  int get port => ConfigManager().apiPort;
 
   @override
   String get schema => ConfigManager().apiSchema;

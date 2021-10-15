@@ -6,7 +6,7 @@ import 'package:flutter_btmnavbar/bloc/login/login_bloc.dart';
 import 'package:flutter_btmnavbar/bloc/login/login_event.dart';
 import 'package:flutter_btmnavbar/bloc/login/login_state.dart';
 import 'package:flutter_btmnavbar/mixins/snackbar.dart';
-import 'package:flutter_btmnavbar/services/fake_services.dart';
+import 'package:flutter_btmnavbar/services/auth_services.dart';
 import 'package:flutter_btmnavbar/widgets/loadings/circular_progress_indicator.dart';
 
 class LoginView extends StatefulWidget {
@@ -79,8 +79,8 @@ class _SignInFormState extends State<_SignInForm> with MySnackBar {
   }
 
   Widget _buildAuthForm() {
-    _emailController.text = FakeService().host;
-    _passwordController.text = "123456";
+    _emailController.text = FAKE_USER_EMAIL;
+    _passwordController.text = FAKE_USER_PASSWORD;
     return Form(
       key: _formKey,
       autovalidateMode: _autoValidate ? AutovalidateMode.always : AutovalidateMode.disabled,
