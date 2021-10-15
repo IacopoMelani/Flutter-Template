@@ -3,6 +3,11 @@ class HttpServiceException implements Exception {
   final String message;
 
   HttpServiceException({required this.httpCode, this.message = "An error occurring"});
+
+  @override
+  String toString() {
+    return "HttpServiceException: $message";
+  }
 }
 
 class HttpServiceRedirectException extends HttpServiceException {

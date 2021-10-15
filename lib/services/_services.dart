@@ -19,9 +19,11 @@ class Result<T> {
 }
 
 class Error {
+  final String message;
+  final int? code;
   Error({
-    required String message,
-    int? code,
+    required this.message,
+    this.code,
   });
 }
 
