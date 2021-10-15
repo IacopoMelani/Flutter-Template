@@ -1,0 +1,5 @@
+version: 0.0.0
+api:
+  schema: https
+  host: jsonplaceholder.typicode.com
+  port: 443

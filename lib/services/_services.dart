@@ -8,6 +8,14 @@ class Result<T> {
   final T? data;
 
   Result({this.data, this.err});
+
+  Result.error({required String message, int? code})
+      : err = Error(message: message, code: code),
+        data = null;
+
+  Result.success(T data)
+      : err = null,
+        data = data;
 }
 
 class Error {
@@ -18,6 +26,7 @@ class Error {
 }
 
 typedef JsonMap = Map<String, dynamic>;
+typedef JsonArray = List<dynamic>;
 
 abstract class HttpService {
   String get schema;
@@ -34,15 +43,15 @@ abstract class HttpService {
   /// [headers] is the headers of the request
   /// Returns a [Future] of [JsonMap] if the request was successful
   /// Throws [HttpServiceException] if the request was failed
-  Future<JsonMap> makeJsonPostRequest(String path, {Map<String, dynamic>? body, Map<String, String>? headers}) async {
+  Future<T> makeJsonPostRequest<T>(String path, {Map<String, dynamic>? body, Map<String, String>? headers}) async {
     final url = buildEndPoint(path);
     headers ??= {};
     headers['Content-Type'] = 'application/json';
     final response = await http.post(url, body: body, headers: headers);
-    return _checkHttpCode(response);
+    return _checkHttpCode<T>(response);
   }
 
-  JsonMap _checkHttpCode(http.Response res) {
+  T _checkHttpCode<T>(http.Response res) {
     final httpCode = res.statusCode;
     if (successHttpCodes.contains(httpCode)) {
       return json.decode(res.body);

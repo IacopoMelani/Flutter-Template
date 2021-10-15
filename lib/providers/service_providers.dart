@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_btmnavbar/services/auth_services.dart';
+import 'package:flutter_btmnavbar/services/fake_services.dart';
 
 class ServiceProviders {
   static ServiceProviders _instance = ServiceProviders._internal();
@@ -20,6 +21,9 @@ class ServiceProviders {
     _providers = [
       RepositoryProvider<AuthService>(
         create: (context) => FakeAuthenticationService(),
+      ),
+      RepositoryProvider<FakeService>(
+        create: (context) => FakeService(),
       ),
     ];
   }

@@ -1,8 +1,9 @@
 import 'package:flutter_btmnavbar/exceptions/auth_exception.dart';
 import 'package:flutter_btmnavbar/models/user.dart';
+import 'package:flutter_btmnavbar/services/_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-abstract class AuthService {
+abstract class AuthService extends HttpService {
   Future<User?> getCurrentUser();
   Future<bool> isLoggedIn();
   Future<User?> signInWithEmailAndPassword(String email, String password);
@@ -10,6 +11,15 @@ abstract class AuthService {
 }
 
 class FakeAuthenticationService extends AuthService {
+  @override
+  String get host => "";
+
+  @override
+  String get port => "";
+
+  @override
+  String get schema => "";
+
   @override
   Future<User?> getCurrentUser() async {
     if ((await isLoggedIn())) {

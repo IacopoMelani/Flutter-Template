@@ -7,20 +7,26 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_btmnavbar/bloc/auth/auth_bloc.dart';
 import 'package:flutter_btmnavbar/bloc/auth/auth_state.dart';
 import 'package:flutter_btmnavbar/providers/bloc_providers.dart';
+import 'package:flutter_btmnavbar/providers/manager_providers.dart';
 import 'package:flutter_btmnavbar/providers/service_providers.dart';
 import 'package:flutter_btmnavbar/styles/color.dart';
 import 'package:flutter_btmnavbar/views/main_view.dart';
 import 'package:flutter_btmnavbar/views/pages/login_view.dart';
 
-void main() => runApp(
-      MultiRepositoryProvider(
-        providers: ServiceProviders().providers,
-        child: MultiBlocProvider(
-          providers: BlocProviders().providers,
-          child: App(),
-        ),
+void main() {
+  runApp(
+    MultiRepositoryProvider(
+      providers: [
+        ...ManagerProviders().providers,
+        ...ServiceProviders().providers,
+      ],
+      child: MultiBlocProvider(
+        providers: BlocProviders().providers,
+        child: App(),
       ),
-    );
+    ),
+  );
+}
 
 class App extends StatefulWidget {
   const App({Key? key}) : super(key: key);
