@@ -1,5 +1,7 @@
 // @author  ninan
 
+import 'dart:developer';
+
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,6 +10,9 @@ import 'package:flutter_btmnavbar/bloc/auth/auth_bloc.dart';
 import 'package:flutter_btmnavbar/bloc/auth/auth_state.dart';
 import 'package:flutter_btmnavbar/bloc/config/config_bloc.dart';
 import 'package:flutter_btmnavbar/bloc/config/config_state.dart';
+import 'package:flutter_btmnavbar/bloc/connectivity/connectivity_bloc.dart';
+import 'package:flutter_btmnavbar/bloc/connectivity/connectivity_state.dart';
+import 'package:flutter_btmnavbar/mixins/snackbar.dart';
 import 'package:flutter_btmnavbar/providers/bloc_providers.dart';
 import 'package:flutter_btmnavbar/providers/manager_providers.dart';
 import 'package:flutter_btmnavbar/providers/service_providers.dart';
@@ -38,7 +43,7 @@ class App extends StatefulWidget {
   _AppState createState() => _AppState();
 }
 
-class _AppState extends State<App> {
+class _AppState extends State<App> with MySnackBar {
   static const String appTitle = 'Bottom Nav Bar';
 
   @override
@@ -61,21 +66,28 @@ class _AppState extends State<App> {
     );
   }
 
-  Widget _buildRoot(BuildContext context) => BlocBuilder<ConfigBloc, ConfigState>(
-        builder: (context, configState) {
-          if (configState is ConfigLoadedState) {
-            return BlocBuilder<AuthBloc, AuthState>(
-              builder: (context, state) {
-                if (state is AuthAuthenticatedState) {
-                  return MainView();
-                } else {
-                  return LoginView();
-                }
-              },
-            );
-          } else {
-            return MyCircularProgressIndicator();
+  Widget _buildRoot(BuildContext context) => BlocListener<ConnectivityBloc, ConnectivityState>(
+        listener: (context, connectivityState) {
+          if (connectivityState is ConnectivityOfflineState) {
+            log("Internet connection issue");
           }
         },
+        child: BlocBuilder<ConfigBloc, ConfigState>(
+          builder: (context, configState) {
+            if (configState is ConfigLoadedState) {
+              return BlocBuilder<AuthBloc, AuthState>(
+                builder: (context, state) {
+                  if (state is AuthAuthenticatedState) {
+                    return MainView();
+                  } else {
+                    return LoginView();
+                  }
+                },
+              );
+            } else {
+              return MyCircularProgressIndicator();
+            }
+          },
+        ),
       );
 }

@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_btmnavbar/managers/config_manager.dart';
+import 'package:flutter_btmnavbar/managers/connectivity_manager.dart';
 
 class ManagerProviders {
   static ManagerProviders _instance = ManagerProviders._internal();
@@ -18,6 +19,9 @@ class ManagerProviders {
     _providers = [
       RepositoryProvider<ConfigManager>(
         create: (context) => ConfigManager(),
+      ),
+      RepositoryProvider<ConnectivityManager>(
+        create: (context) => ConnectivityManager(),
       ),
     ];
   }

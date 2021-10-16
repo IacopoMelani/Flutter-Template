@@ -3,9 +3,11 @@ import 'package:flutter_btmnavbar/bloc/auth/auth_bloc.dart';
 import 'package:flutter_btmnavbar/bloc/auth/auth_event.dart';
 import 'package:flutter_btmnavbar/bloc/config/config_bloc.dart';
 import 'package:flutter_btmnavbar/bloc/config/config_event.dart';
+import 'package:flutter_btmnavbar/bloc/connectivity/connectivity_bloc.dart';
 import 'package:flutter_btmnavbar/bloc/login/login_bloc.dart';
 import 'package:flutter_btmnavbar/bloc/logout/logout_bloc.dart';
 import 'package:flutter_btmnavbar/managers/config_manager.dart';
+import 'package:flutter_btmnavbar/managers/connectivity_manager.dart';
 import 'package:flutter_btmnavbar/services/auth_services.dart';
 
 class BlocProviders {
@@ -32,6 +34,12 @@ class BlocProviders {
         )..add(
             ConfigNeedsLoadEvent(),
           ),
+      ),
+      // ConnectivityBloc
+      BlocProvider<ConnectivityBloc>(
+        create: (context) => ConnectivityBloc(
+          RepositoryProvider.of<ConnectivityManager>(context),
+        ),
       ),
       // AuthBloc
       BlocProvider<AuthBloc>(
