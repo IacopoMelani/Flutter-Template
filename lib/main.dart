@@ -1,7 +1,5 @@
 // @author  ninan
 
-import 'dart:developer';
-
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,7 +17,7 @@ import 'package:flutter_btmnavbar/providers/service_providers.dart';
 import 'package:flutter_btmnavbar/styles/color.dart';
 import 'package:flutter_btmnavbar/views/main_view.dart';
 import 'package:flutter_btmnavbar/views/pages/login_view.dart';
-import 'package:flutter_btmnavbar/widgets/loadings/circular_progress_indicator.dart';
+import 'package:flutter_btmnavbar/widgets/loadings/circular_progress_indicator_view.dart';
 
 void main() {
   runApp(
@@ -67,27 +65,26 @@ class _AppState extends State<App> with MySnackBar {
   }
 
   Widget _buildRoot(BuildContext context) => BlocListener<ConnectivityBloc, ConnectivityState>(
-        listener: (context, connectivityState) {
-          if (connectivityState is ConnectivityOfflineState) {
-            log("Internet connection issue");
+        listener: (context, state) {
+          if (state is ConnectivityOfflineState) {
+            showError(context, 'Internet connection issue');
+          }
+          if (state is ConnectivityOnlineState) {
+            showSuccess(context, 'Internet connection is available');
           }
         },
         child: BlocBuilder<ConfigBloc, ConfigState>(
           builder: (context, configState) {
             if (configState is ConfigLoadedState) {
               return BlocBuilder<AuthBloc, AuthState>(
-                builder: (context, state) {
-                  if (state is AuthAuthenticatedState) {
-                    return MainView();
-                  } else {
-                    return LoginView();
-                  }
-                },
+                builder: (context, authState) => _buildView(context, authState),
               );
             } else {
-              return MyCircularProgressIndicator();
+              return MyCircularProgressIndicatorView();
             }
           },
         ),
       );
+
+  Widget _buildView(BuildContext context, AuthState state) => state is AuthAuthenticatedState ? MainView() : LoginView();
 }

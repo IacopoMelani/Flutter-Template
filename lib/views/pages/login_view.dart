@@ -9,7 +9,7 @@ import 'package:flutter_btmnavbar/mixins/snackbar.dart';
 import 'package:flutter_btmnavbar/services/auth_services.dart';
 import 'package:flutter_btmnavbar/styles/color.dart';
 import 'package:flutter_btmnavbar/widgets/inputs/my_text_field.dart';
-import 'package:flutter_btmnavbar/widgets/loadings/circular_progress_indicator.dart';
+import 'package:flutter_btmnavbar/widgets/loadings/circular_progress_indicator_view.dart';
 
 // MARK: - LoginScreen
 
@@ -30,10 +30,10 @@ class _LoginViewState extends State<LoginView> with MySnackBar {
                 return _AuthForm();
               }
               if (state is AuthFailureState) {
-                showError(state.message);
+                showError(context, state.message);
                 return _AuthForm();
               }
-              return MyCircularProgressIndicator();
+              return MyCircularProgressIndicatorView();
             },
           ),
         ),
@@ -80,13 +80,13 @@ class _SignInFormState extends State<_SignInForm> with MySnackBar {
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
         if (state is LoginFailureState) {
-          showError(state.error);
+          showError(context, state.error);
         }
       },
       child: BlocBuilder<LoginBloc, LoginState>(
         builder: (context, state) {
           if (state is LoginLoadingState) {
-            return MyCircularProgressIndicator();
+            return MyCircularProgressIndicatorView();
           }
           return SingleChildScrollView(
             child: _buildAuthForm(),
