@@ -11,6 +11,8 @@ import 'package:flutter_btmnavbar/styles/color.dart';
 import 'package:flutter_btmnavbar/widgets/inputs/my_text_field.dart';
 import 'package:flutter_btmnavbar/widgets/loadings/circular_progress_indicator.dart';
 
+// MARK: - LoginScreen
+
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
 
@@ -38,6 +40,8 @@ class _LoginViewState extends State<LoginView> with MySnackBar {
       );
 }
 
+// MARK: - AuthForm
+
 class _AuthForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Container(
@@ -45,6 +49,8 @@ class _AuthForm extends StatelessWidget {
         child: _SignInForm(),
       );
 }
+
+// MARK: - SignInForm
 
 class _SignInForm extends StatefulWidget {
   const _SignInForm({Key? key}) : super(key: key);
@@ -59,6 +65,15 @@ class _SignInFormState extends State<_SignInForm> with MySnackBar {
   final _passwordController = TextEditingController();
   bool _autoValidate = false;
   bool _passwordVisible = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _emailController.text = FAKE_USER_EMAIL;
+    _passwordController.text = FAKE_USER_PASSWORD;
+  }
+
+// MARK: - SignInForm Build
 
   @override
   Widget build(BuildContext context) {
@@ -82,8 +97,6 @@ class _SignInFormState extends State<_SignInForm> with MySnackBar {
   }
 
   Widget _buildAuthForm() {
-    _emailController.text = FAKE_USER_EMAIL;
-    _passwordController.text = FAKE_USER_PASSWORD;
     return Form(
       key: _formKey,
       autovalidateMode: _autoValidate ? AutovalidateMode.always : AutovalidateMode.disabled,
@@ -106,17 +119,7 @@ class _SignInFormState extends State<_SignInForm> with MySnackBar {
               top: 30.0,
               bottom: 0,
             ),
-            child: TextFormField(
-              autofocus: true,
-              controller: _emailController,
-              keyboardType: TextInputType.emailAddress,
-              autocorrect: false,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Email',
-                hintText: 'Enter valid email id as abc@gmail.com',
-              ),
-            ),
+            child: _buildEmailInput(),
           ),
           Padding(
             padding: const EdgeInsets.only(
@@ -125,35 +128,7 @@ class _SignInFormState extends State<_SignInForm> with MySnackBar {
               top: 25.0,
               bottom: 0,
             ),
-            child: MyTextField(
-              labelText: 'Password',
-              controller: _passwordController,
-              hintText: 'Enter password',
-              obscureText: !_passwordVisible,
-              suffixIcon: IconButton(
-                highlightColor: Colors.transparent,
-                splashColor: Colors.transparent,
-                hoverColor: Colors.transparent,
-                icon: Icon(
-                  _passwordVisible ? Icons.visibility : Icons.visibility_off,
-                  color: ColorApp.primaryColorLight,
-                ),
-                onPressed: () => setState(
-                  () {
-                    _passwordVisible = !_passwordVisible;
-                  },
-                ),
-              ),
-            ),
-// TextFormField(
-//               controller: _passwordController,
-//               obscureText: true,
-//               decoration: InputDecoration(
-//                 border: OutlineInputBorder(),
-//                 labelText: 'Password',
-//                 hintText: 'Enter secure password',
-//               ),
-//             ),
+            child: _buildPasswordInput(),
           ),
           SizedBox(
             height: 45,
@@ -176,7 +151,41 @@ class _SignInFormState extends State<_SignInForm> with MySnackBar {
     );
   }
 
-  _onLoginButtonPressed() {
+  Widget _buildEmailInput() => MyTextField(
+        labelText: "Email",
+        autofocus: true,
+        controller: _emailController,
+        keyboardType: TextInputType.emailAddress,
+        hintText: "Enter your email",
+        autocorrect: false,
+        validator: (value) => value == null || value == "" ? "Email is required" : null,
+      );
+
+  Widget _buildPasswordInput() => MyTextField(
+        labelText: 'Password',
+        controller: _passwordController,
+        hintText: 'Enter password',
+        obscureText: !_passwordVisible,
+        validator: (value) => value == null || value == "" ? "Password is required" : null,
+        suffixIcon: IconButton(
+          highlightColor: Colors.transparent,
+          splashColor: Colors.transparent,
+          hoverColor: Colors.transparent,
+          icon: Icon(
+            _passwordVisible ? Icons.visibility : Icons.visibility_off,
+            color: ColorApp.primaryColorLight,
+          ),
+          onPressed: () => setState(
+            () {
+              _passwordVisible = !_passwordVisible;
+            },
+          ),
+        ),
+      );
+
+  // MARK: - SignInForm Actions
+
+  void _onLoginButtonPressed() {
     final LoginState state = BlocProvider.of<LoginBloc>(context).state;
     if (state is LoginLoadingState) {
       return;

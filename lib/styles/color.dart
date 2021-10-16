@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 class ColorApp {
   static final Color primaryColorLight = Colors.green;
   static final Color secondaryColorLight = Colors.greenAccent;
-  static final Color primaryTextColorLight = Colors.black;
-  static final Color secondaryTextColorLight = Colors.white;
+  static final Color primaryTextColorLight = Colors.white;
+  static final Color secondaryTextColorLight = Colors.black;
 
   static final Color primaryColorDark = Colors.green;
   static final Color secondaryColorDark = Colors.greenAccent;

@@ -16,6 +16,7 @@ class MyTextField extends StatelessWidget {
   final TextFieldType type;
   final TextEditingController? controller;
   final TextInputType? keyboardType;
+  final String? Function(String?)? validator;
 
   const MyTextField({
     Key? key,
@@ -29,23 +30,42 @@ class MyTextField extends StatelessWidget {
     this.prefixIcon,
     this.obscureText,
     this.suffixIcon,
+    this.validator,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => TextField(
-        autofocus: autofocus ?? false,
-        controller: controller,
-        keyboardType: keyboardType,
-        autocorrect: false,
-        obscureText: obscureText ?? false,
-        decoration: InputDecoration(
-          labelText: labelText,
-          hintText: hintText,
-          prefixIcon: prefixIcon != null ? prefixIcon : null,
-          suffixIcon: suffixIcon != null ? suffixIcon : null,
-          border: OutlineInputBorder(
-            borderRadius: type == TextFieldType.search ? BorderRadius.circular(10) : BorderRadius.circular(4),
+  Widget build(BuildContext context) => validator == null
+      ? TextField(
+          autofocus: autofocus ?? false,
+          controller: controller,
+          keyboardType: keyboardType,
+          autocorrect: false,
+          obscureText: obscureText ?? false,
+          decoration: InputDecoration(
+            labelText: labelText,
+            hintText: hintText,
+            prefixIcon: prefixIcon != null ? prefixIcon : null,
+            suffixIcon: suffixIcon != null ? suffixIcon : null,
+            border: OutlineInputBorder(
+              borderRadius: type == TextFieldType.search ? BorderRadius.circular(10) : BorderRadius.circular(4),
+            ),
           ),
-        ),
-      );
+        )
+      : TextFormField(
+          autofocus: autofocus ?? false,
+          controller: controller,
+          keyboardType: keyboardType,
+          autocorrect: false,
+          obscureText: obscureText ?? false,
+          validator: validator,
+          decoration: InputDecoration(
+            labelText: labelText,
+            hintText: hintText,
+            prefixIcon: prefixIcon != null ? prefixIcon : null,
+            suffixIcon: suffixIcon != null ? suffixIcon : null,
+            border: OutlineInputBorder(
+              borderRadius: type == TextFieldType.search ? BorderRadius.circular(10) : BorderRadius.circular(4),
+            ),
+          ),
+        );
 }

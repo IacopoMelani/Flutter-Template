@@ -4,7 +4,7 @@ import 'package:yaml/yaml.dart';
 typedef YamlMap = Map<String, dynamic>;
 
 class ConfigManager {
-  static const String configFilePath = "assets/config.yaml";
+  static const String configFilePath = "config.yaml";
   static ConfigManager _singleton = ConfigManager._internal();
 
   dynamic _config;
