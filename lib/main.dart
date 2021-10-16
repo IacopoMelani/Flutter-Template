@@ -69,8 +69,8 @@ class _AppState extends State<App> with MySnackBar {
           if (state is ConnectivityOfflineState) {
             showError(context, 'Internet connection issue');
           }
-          if (state is ConnectivityOnlineState) {
-            showSuccess(context, 'Internet connection is available');
+          if (state is ConnectivityOnlineState && state.previousState is ConnectivityOfflineState) {
+            showSuccess(context, 'Internet connection is now available');
           }
         },
         child: BlocBuilder<ConfigBloc, ConfigState>(

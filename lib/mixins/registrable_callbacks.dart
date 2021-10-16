@@ -1,7 +1,7 @@
 mixin RegistrableCallbacks<T> {
   List<void Function(T event)> _registeredCallbacks = [];
 
-  void onEvent(T event) {
+  void notify(T event) {
     _registeredCallbacks.forEach((callback) => callback(event));
   }
 

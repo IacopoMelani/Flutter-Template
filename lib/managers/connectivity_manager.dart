@@ -9,7 +9,7 @@ class ConnectivityManager with RegistrableCallbacks {
   }
 
   ConnectivityManager._internal() {
-    Connectivity().onConnectivityChanged.listen((event) => onEvent(event));
+    Connectivity().onConnectivityChanged.listen((event) => notify(event));
   }
 
   static Future<bool> isConnectedByConnectivityResult(ConnectivityResult connectivityResult) async {

@@ -2,18 +2,19 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 
 abstract class ConnectivityState {
   final ConnectivityResult connectivityResult;
+  final ConnectivityState? previousState;
 
-  ConnectivityState(this.connectivityResult);
+  ConnectivityState(this.connectivityResult, this.previousState);
 }
 
 class ConnectivityInitialState extends ConnectivityState {
-  ConnectivityInitialState(connectivityResult) : super(connectivityResult);
+  ConnectivityInitialState(ConnectivityResult connectivityResult, ConnectivityState? previousState) : super(connectivityResult, previousState);
 }
 
 class ConnectivityOnlineState extends ConnectivityState {
-  ConnectivityOnlineState(connectivityResult) : super(connectivityResult);
+  ConnectivityOnlineState(ConnectivityResult connectivityResult, ConnectivityState? previousState) : super(connectivityResult, previousState);
 }
 
 class ConnectivityOfflineState extends ConnectivityState {
-  ConnectivityOfflineState(connectivityResult) : super(connectivityResult);
+  ConnectivityOfflineState(ConnectivityResult connectivityResult, ConnectivityState? previousState) : super(connectivityResult, previousState);
 }
