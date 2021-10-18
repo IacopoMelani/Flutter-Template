@@ -8,17 +8,17 @@ class ConnectivityBloc extends Bloc<ConnectivityEvent, ConnectivityState> {
   final ConnectivityManager _manager;
 
   ConnectivityBloc(this._manager) : super(ConnectivityInitialState(ConnectivityResult.none, null)) {
-    _registerCallbackToConnectivityManager();
+    _registerCallbackToConnectivityManagerNotify();
   }
 
   @override
   Stream<ConnectivityState> mapEventToState(ConnectivityEvent event) async* {
     if (event is ConnectivityChangedEvent) {
-      yield* _mapConnectivityChangedToState(event.status);
+      yield* _mapConnectivityChangedEventToState(event.status);
     }
   }
 
-  Stream<ConnectivityState> _mapConnectivityChangedToState(ConnectivityResult result) async* {
+  Stream<ConnectivityState> _mapConnectivityChangedEventToState(ConnectivityResult result) async* {
     var connected = await ConnectivityManager.isConnectedByConnectivityResult(result);
     if (connected) {
       yield ConnectivityOnlineState(result, this.state);
@@ -27,7 +27,7 @@ class ConnectivityBloc extends Bloc<ConnectivityEvent, ConnectivityState> {
     }
   }
 
-  void _registerCallbackToConnectivityManager() {
+  void _registerCallbackToConnectivityManagerNotify() {
     _manager.registerCallback(
       (result) => add(ConnectivityChangedEvent(result)),
     );

@@ -24,9 +24,10 @@ class UserCollectionBloc extends Bloc<UserCollectionEvent, UserCollectionState> 
     try {
       final result = await _service.users();
       if (result.err != null) {
-        UserCollectionFailedState(error: result.err!.message, users: this.state.users);
+        yield UserCollectionFailedState(error: result.err!.message, users: this.state.users);
       } else {
         yield UserCollectionSuccessState(users: result.data!);
+        yield UserCollectionInitialState(users: result.data!);
       }
     } catch (e) {
       UserCollectionFailedState(error: e.toString(), users: this.state.users);

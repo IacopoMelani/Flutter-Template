@@ -153,7 +153,6 @@ class _SignInFormState extends State<_SignInForm> with MySnackBar {
 
   Widget _buildEmailInput() => MyTextField(
         labelText: "Email",
-        autofocus: true,
         controller: _emailController,
         keyboardType: TextInputType.emailAddress,
         hintText: "Enter your email",

@@ -43,7 +43,7 @@ class _MainViewState extends State<MainView> {
           appBar: _buildAppBar(),
           body: _buildPageView(),
           bottomNavigationBar: _buildBottomAppBar(),
-          floatingActionButton: _buildFloatingActionButton(),
+          floatingActionButton: MediaQuery.of(context).viewInsets.bottom == 0 ? _buildFloatingActionButton() : null,
           floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         ),
       );
