@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 enum TextFieldType {
@@ -5,7 +7,7 @@ enum TextFieldType {
   text,
 }
 
-class MyTextField extends StatelessWidget {
+class MyTextField extends StatefulWidget {
   final String labelText;
   final String? hintText;
   final Widget? prefixIcon;
@@ -14,6 +16,7 @@ class MyTextField extends StatelessWidget {
   final bool? obscureText;
   final bool? autocorrect;
   final TextFieldType type;
+  final Function(String)? onChanged;
   final TextEditingController? controller;
   final TextInputType? keyboardType;
   final String? Function(String?)? validator;
@@ -25,6 +28,7 @@ class MyTextField extends StatelessWidget {
     this.hintText,
     this.autocorrect,
     this.autofocus,
+    this.onChanged,
     this.controller,
     this.keyboardType,
     this.prefixIcon,
@@ -34,38 +38,61 @@ class MyTextField extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => validator == null
+  _MyTextFieldState createState() => _MyTextFieldState();
+}
+
+class _MyTextFieldState extends State<MyTextField> {
+  Timer? _debounce;
+
+  @override
+  Widget build(BuildContext context) => this.widget.validator == null
       ? TextField(
-          autofocus: autofocus ?? false,
-          controller: controller,
-          keyboardType: keyboardType,
+          autofocus: this.widget.autofocus ?? false,
+          controller: this.widget.controller,
+          keyboardType: this.widget.keyboardType,
           autocorrect: false,
-          obscureText: obscureText ?? false,
+          obscureText: this.widget.obscureText ?? false,
+          onChanged: this.widget.onChanged != null ? onSearchChanged : null,
           decoration: InputDecoration(
-            labelText: labelText,
-            hintText: hintText,
-            prefixIcon: prefixIcon != null ? prefixIcon : null,
-            suffixIcon: suffixIcon != null ? suffixIcon : null,
+            labelText: this.widget.labelText,
+            hintText: this.widget.hintText,
+            prefixIcon: this.widget.prefixIcon != null ? this.widget.prefixIcon : null,
+            suffixIcon: this.widget.suffixIcon != null ? this.widget.suffixIcon : null,
             border: OutlineInputBorder(
-              borderRadius: type == TextFieldType.search ? BorderRadius.circular(10) : BorderRadius.circular(4),
+              borderRadius: this.widget.type == TextFieldType.search ? BorderRadius.circular(10) : BorderRadius.circular(4),
             ),
           ),
         )
       : TextFormField(
-          autofocus: autofocus ?? false,
-          controller: controller,
-          keyboardType: keyboardType,
+          autofocus: this.widget.autofocus ?? false,
+          controller: this.widget.controller,
+          keyboardType: this.widget.keyboardType,
           autocorrect: false,
-          obscureText: obscureText ?? false,
-          validator: validator,
+          obscureText: this.widget.obscureText ?? false,
+          validator: this.widget.validator,
+          onChanged: this.widget.onChanged != null ? onSearchChanged : null,
           decoration: InputDecoration(
-            labelText: labelText,
-            hintText: hintText,
-            prefixIcon: prefixIcon != null ? prefixIcon : null,
-            suffixIcon: suffixIcon != null ? suffixIcon : null,
+            labelText: this.widget.labelText,
+            hintText: this.widget.hintText,
+            prefixIcon: this.widget.prefixIcon != null ? this.widget.prefixIcon : null,
+            suffixIcon: this.widget.suffixIcon != null ? this.widget.suffixIcon : null,
             border: OutlineInputBorder(
-              borderRadius: type == TextFieldType.search ? BorderRadius.circular(10) : BorderRadius.circular(4),
+              borderRadius: this.widget.type == TextFieldType.search ? BorderRadius.circular(10) : BorderRadius.circular(4),
             ),
           ),
         );
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    super.dispose();
+  }
+
+  void onSearchChanged(String value) {
+    if (this._debounce?.isActive ?? false) {
+      this._debounce?.cancel();
+    }
+
+    this._debounce = Timer(const Duration(milliseconds: 500), () => this.widget.onChanged?.call(value));
+  }
 }

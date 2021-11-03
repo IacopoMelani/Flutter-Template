@@ -35,11 +35,9 @@ class FakeService extends HttpService {
     PostDTOsResult result;
 
     try {
-      var listPosts = <PostDTO>[];
-      final response = await makeJsonPostRequest<JsonArray>(FAKE_SERVICE_POSTS_PATH);
-      for (JsonMap m in response) {
-        listPosts.add(PostDTO.fromJson(m));
-      }
+      final response = await makeJsonGetRequest<Iterable>(FAKE_SERVICE_POSTS_PATH);
+      List<PostDTO> listPosts = List.from(response.map((json) => PostDTO.fromJson(json)));
+
       result = Result.success(listPosts);
     } on HttpServiceException catch (e) {
       result = Result.error(
@@ -55,11 +53,9 @@ class FakeService extends HttpService {
     CommentDTOsResult result;
 
     try {
-      var listComments = <CommentDTO>[];
-      final response = await makeJsonPostRequest<JsonArray>(FAKE_SERVICE_COMMENTS_PATH);
-      for (JsonMap m in response) {
-        listComments.add(CommentDTO.fromJson(m));
-      }
+      final response = await makeJsonGetRequest<Iterable>(FAKE_SERVICE_COMMENTS_PATH);
+      List<CommentDTO> listComments = List.from(response.map((m) => CommentDTO.fromJson(m)));
+
       result = Result.success(listComments);
     } on HttpServiceException catch (e) {
       result = Result.error(
@@ -75,11 +71,9 @@ class FakeService extends HttpService {
     UserDTOsResult result;
 
     try {
-      var listUsers = <UserDTO>[];
-      final response = await makeJsonPostRequest<JsonArray>(FAKE_SERVICE_USERS_PATH);
-      for (JsonMap m in response) {
-        listUsers.add(UserDTO.fromJson(m));
-      }
+      final response = await makeJsonGetRequest<List<dynamic>>(FAKE_SERVICE_USERS_PATH);
+      List<UserDTO> listUsers = List<UserDTO>.from(response.map((m) => UserDTO.fromJson(m)));
+
       result = Result.success(listUsers);
     } on HttpServiceException catch (e) {
       result = Result.error(

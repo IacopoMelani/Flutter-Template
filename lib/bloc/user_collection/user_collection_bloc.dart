@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter_btmnavbar/bloc/user_collection/user_collection_event.dart';
 import 'package:flutter_btmnavbar/bloc/user_collection/user_collection_state.dart';
+import 'package:flutter_btmnavbar/dto/user_dto.dart';
 import 'package:flutter_btmnavbar/services/fake_services.dart';
 
 class UserCollectionBloc extends Bloc<UserCollectionEvent, UserCollectionState> {
@@ -17,25 +18,46 @@ class UserCollectionBloc extends Bloc<UserCollectionEvent, UserCollectionState> 
     if (event is UserCollectionResetEvent) {
       yield* _mapUserCollectionResetEventToState(event);
     }
+
+    if (event is UserCollectionSearchEvent) {
+      yield* _mapUserCollectionSearchEventToState(event);
+    }
   }
 
-  Stream<UserCollectionState> _mapUserCollectionPullEventToState(UserCollectionPullEvent event) async* {
-    yield UserCollectionLoadingState(users: this.state.users);
+  Stream<UserCollectionState> _pullUserAndCallback(UserCollectionEvent event, List<UserDTO> Function(List<UserDTO>)? callback) async* {
     try {
       final result = await _service.users();
       if (result.err != null) {
         yield UserCollectionFailedState(error: result.err!.message, users: this.state.users);
       } else {
-        yield UserCollectionSuccessState(users: result.data!);
-        yield UserCollectionInitialState(users: result.data!);
+        if (callback != null) {
+          final users = callback(result.data!);
+          yield UserCollectionSuccessState(users: users);
+        } else {
+          yield UserCollectionSuccessState(users: result.data!);
+        }
       }
     } catch (e) {
-      UserCollectionFailedState(error: e.toString(), users: this.state.users);
+      yield UserCollectionFailedState(error: e.toString(), users: this.state.users);
     }
+  }
+
+  // MARK: events mapper
+
+  Stream<UserCollectionState> _mapUserCollectionPullEventToState(UserCollectionPullEvent event) async* {
+    yield UserCollectionLoadingState(users: this.state.users);
+    yield* _pullUserAndCallback(event, null);
   }
 
   Stream<UserCollectionState> _mapUserCollectionResetEventToState(UserCollectionResetEvent event) async* {
     yield UserCollectionLoadingState(users: this.state.users);
     yield UserCollectionInitialState(users: []);
+  }
+
+  Stream<UserCollectionState> _mapUserCollectionSearchEventToState(UserCollectionSearchEvent event) async* {
+    yield UserCollectionLoadingState(users: this.state.users);
+    yield* _pullUserAndCallback(event, (List<UserDTO> users) {
+      return users.where((user) => user.name.toLowerCase().contains(event.query.toLowerCase())).toList();
+    });
   }
 }

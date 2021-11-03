@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter_btmnavbar/exceptions/service_exception.dart';
 import 'package:http/http.dart' as http;
@@ -27,9 +28,6 @@ class Error {
   });
 }
 
-typedef JsonMap = Map<String, dynamic>;
-typedef JsonArray = List<dynamic>;
-
 abstract class HttpService {
   String get schema;
   String get host;
@@ -39,24 +37,42 @@ abstract class HttpService {
 
   Uri buildEndPoint(String path) => Uri.parse('$baseUrl/$path');
 
+  /// The method [makeJsonGetRequest] is used to make a GET request to the server and return the response as a JSON object.
+  /// [path] is the path to the resource.
+  /// [headers] is a map of headers to be sent with the request.
+  /// Returns a [Future] of [T] which is the response body.
+  /// Throws [HttpServiceException] if the request fails.
+  Future<T> makeJsonGetRequest<T>(String path, {Map<String, String>? headers}) async {
+    final url = buildEndPoint(path);
+    headers ??= {};
+    final response = await http.get(url, headers: headers);
+    return _checkHttpCodeAndDecode(response);
+  }
+
   /// The method [makeJsonPostRequest] is used to make a post request to the server
   /// [path] is the path to the endpoint
   /// [body] is the body of the request
   /// [headers] is the headers of the request
-  /// Returns a [Future] of [JsonMap] if the request was successful
-  /// Throws [HttpServiceException] if the request was failed
+  /// Returns a [Future] of [T] if the request was successful
+  /// Throws [HttpServiceException] if the request fails
   Future<T> makeJsonPostRequest<T>(String path, {Map<String, dynamic>? body, Map<String, String>? headers}) async {
     final url = buildEndPoint(path);
     headers ??= {};
     headers['Content-Type'] = 'application/json';
     final response = await http.post(url, body: body, headers: headers);
-    return _checkHttpCode<T>(response);
+    return _checkHttpCodeAndDecode<T>(response);
   }
 
-  T _checkHttpCode<T>(http.Response res) {
+  /// The method [_checkHttpCodeAndDecode] is used to check the http code of the response and decode the response body if the http code is 2XX ei
+  T _checkHttpCodeAndDecode<T>(http.Response res) {
     final httpCode = res.statusCode;
     if (successHttpCodes.contains(httpCode)) {
-      return json.decode(res.body);
+      try {
+        return jsonDecode(res.body);
+      } catch (e) {
+        log('error: $e');
+        throw HttpServiceException(message: e.toString());
+      }
     } else if (redirectHttpCodes.contains(httpCode)) {
       throw HttpServiceRedirectException(httpCode: httpCode, message: res.body);
     } else if (clientErrorHttpCodes.contains(httpCode)) {

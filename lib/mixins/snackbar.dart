@@ -24,6 +24,7 @@ mixin MySnackBar {
   void _show(BuildContext context, String message, Color color, IconData icon) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
+        behavior: SnackBarBehavior.floating,
         content: RichText(
           textAlign: TextAlign.center,
           text: TextSpan(

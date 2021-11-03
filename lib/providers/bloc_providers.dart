@@ -6,9 +6,11 @@ import 'package:flutter_btmnavbar/bloc/config/config_event.dart';
 import 'package:flutter_btmnavbar/bloc/connectivity/connectivity_bloc.dart';
 import 'package:flutter_btmnavbar/bloc/login/login_bloc.dart';
 import 'package:flutter_btmnavbar/bloc/logout/logout_bloc.dart';
+import 'package:flutter_btmnavbar/bloc/user_collection/user_collection_bloc.dart';
 import 'package:flutter_btmnavbar/managers/config_manager.dart';
 import 'package:flutter_btmnavbar/managers/connectivity_manager.dart';
 import 'package:flutter_btmnavbar/services/auth_services.dart';
+import 'package:flutter_btmnavbar/services/fake_services.dart';
 
 class BlocProviders {
   static final BlocProviders _instance = new BlocProviders._internal();
@@ -60,6 +62,12 @@ class BlocProviders {
         create: (context) => LogoutBloc(
           BlocProvider.of<AuthBloc>(context),
           RepositoryProvider.of<AuthService>(context),
+        ),
+      ),
+      // UserCollectionBloc
+      BlocProvider<UserCollectionBloc>(
+        create: (context) => UserCollectionBloc(
+          RepositoryProvider.of<FakeService>(context),
         ),
       ),
     ];

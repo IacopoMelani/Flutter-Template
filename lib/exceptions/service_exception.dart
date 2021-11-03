@@ -2,7 +2,7 @@ class HttpServiceException implements Exception {
   final int httpCode;
   final String message;
 
-  HttpServiceException({required this.httpCode, this.message = "An error occurring"});
+  HttpServiceException({this.httpCode = 999, this.message = "An error occurring"});
 
   @override
   String toString() {
