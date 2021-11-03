@@ -24,7 +24,7 @@ class UserCollectionBloc extends Bloc<UserCollectionEvent, UserCollectionState> 
     }
   }
 
-  Stream<UserCollectionState> _pullUserAndCallback(UserCollectionEvent event, List<UserDTO> Function(List<UserDTO>)? callback) async* {
+  Stream<UserCollectionState> _pullUsersAndCallback(UserCollectionEvent event, List<UserDTO> Function(List<UserDTO>)? callback) async* {
     try {
       final result = await _service.users();
       if (result.err != null) {
@@ -46,7 +46,7 @@ class UserCollectionBloc extends Bloc<UserCollectionEvent, UserCollectionState> 
 
   Stream<UserCollectionState> _mapUserCollectionPullEventToState(UserCollectionPullEvent event) async* {
     yield UserCollectionLoadingState(users: this.state.users);
-    yield* _pullUserAndCallback(event, null);
+    yield* _pullUsersAndCallback(event, null);
   }
 
   Stream<UserCollectionState> _mapUserCollectionResetEventToState(UserCollectionResetEvent event) async* {
@@ -56,7 +56,7 @@ class UserCollectionBloc extends Bloc<UserCollectionEvent, UserCollectionState> 
 
   Stream<UserCollectionState> _mapUserCollectionSearchEventToState(UserCollectionSearchEvent event) async* {
     yield UserCollectionLoadingState(users: this.state.users);
-    yield* _pullUserAndCallback(event, (List<UserDTO> users) {
+    yield* _pullUsersAndCallback(event, (List<UserDTO> users) {
       return users.where((user) => user.name.toLowerCase().contains(event.query.toLowerCase())).toList();
     });
   }

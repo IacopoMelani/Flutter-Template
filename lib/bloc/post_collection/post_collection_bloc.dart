@@ -24,7 +24,7 @@ class PostCollectionBloc extends Bloc<PostCollectionEvent, PostCollectionState> 
     }
   }
 
-  Stream<PostCollectionState> _pullPostAndCallback(PostCollectionEvent event, List<PostDTO> Function(List<PostDTO>)? callback) async* {
+  Stream<PostCollectionState> _pullPostsAndCallback(PostCollectionEvent event, List<PostDTO> Function(List<PostDTO>)? callback) async* {
     try {
       final result = await _service.posts();
       if (result.err != null) {
@@ -50,7 +50,7 @@ class PostCollectionBloc extends Bloc<PostCollectionEvent, PostCollectionState> 
     } else {
       yield PostCollectionLoadingState(posts: this.state.posts);
     }
-    yield* _pullPostAndCallback(event, null);
+    yield* _pullPostsAndCallback(event, null);
   }
 
   Stream<PostCollectionState> _mapPostCollectionResetEventToState(PostCollectionResetEvent event) async* {
@@ -60,7 +60,7 @@ class PostCollectionBloc extends Bloc<PostCollectionEvent, PostCollectionState> 
 
   Stream<PostCollectionState> _mapPostCollectionSearchEventToState(PostCollectionSearchEvent event) async* {
     yield PostCollectionLoadingState(posts: this.state.posts);
-    yield* _pullPostAndCallback(event, (List<PostDTO> posts) {
+    yield* _pullPostsAndCallback(event, (List<PostDTO> posts) {
       return posts.where((post) => post.title.toLowerCase().contains(event.query.toLowerCase())).toList();
     });
   }
