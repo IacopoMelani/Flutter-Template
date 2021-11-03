@@ -17,7 +17,9 @@ class _SearchState extends State<Search> with MySnackBar {
   @override
   Widget build(BuildContext context) {
     final userCollectionBloc = BlocProvider.of<UserCollectionBloc>(context);
-    userCollectionBloc.add(UserCollectionPullEvent());
+    if (userCollectionBloc.state.users.isEmpty) {
+      userCollectionBloc.add(UserCollectionPullEvent());
+    }
     return BlocListener<UserCollectionBloc, UserCollectionState>(
       listener: (context, state) {
         if (state is UserCollectionFailedState) {

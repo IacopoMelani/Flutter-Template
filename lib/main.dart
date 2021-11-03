@@ -86,5 +86,12 @@ class _AppState extends State<App> with MySnackBar {
         ),
       );
 
-  Widget _buildView(BuildContext context, AuthState state) => state is AuthAuthenticatedState ? MainView() : LoginView();
+  Widget _buildView(BuildContext context, AuthState state) {
+    final view = state is AuthAuthenticatedState ? MainView() : LoginView();
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      onPanDown: (_) => FocusScope.of(context).unfocus(),
+      child: view,
+    );
+  }
 }

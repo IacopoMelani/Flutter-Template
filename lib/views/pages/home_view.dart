@@ -17,52 +17,59 @@ class _HomeState extends State<Home> with MySnackBar {
   @override
   Widget build(BuildContext context) {
     final postCollectionBloc = BlocProvider.of<PostCollectionBloc>(context);
-    postCollectionBloc.add(PostCollectionPullEvent());
+    if (postCollectionBloc.state.posts.isEmpty) {
+      postCollectionBloc.add(PostCollectionPullEvent());
+    }
     return BlocListener<PostCollectionBloc, PostCollectionState>(
       listener: (context, state) {
         if (state is PostCollectionFailedState) {
           showError(context, "Failed pull posts");
         }
       },
-      child: CustomScrollView(
-        slivers: [
-          BlocBuilder<PostCollectionBloc, PostCollectionState>(
-            builder: (context, state) {
-              if (state.posts.length > 0) {
-                return SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      final post = state.posts[index];
-                      if (state.posts.length - 10 == index) {
-                        postCollectionBloc.add(PostCollectionPullEvent());
-                      }
-                      return _buildPost(post);
-                    },
-                    childCount: state.posts.length,
-                  ),
-                );
-              }
-              return SliverList(
-                delegate: SliverChildListDelegate([]),
-              );
-            },
-          ),
-          BlocBuilder<PostCollectionBloc, PostCollectionState>(
-            builder: (context, state) {
-              if (state is PostCollectionLoadingState) {
-                return SliverToBoxAdapter(
-                  child: Container(
-                    height: 100,
-                    child: Center(
-                      child: CircularProgressIndicator(),
+      child: RefreshIndicator(
+        child: CustomScrollView(
+          slivers: [
+            BlocBuilder<PostCollectionBloc, PostCollectionState>(
+              builder: (context, state) {
+                if (state.posts.length > 0) {
+                  return SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        final post = state.posts[index];
+                        if (state.posts.length - 10 == index) {
+                          postCollectionBloc.add(PostCollectionPullEvent());
+                        }
+                        return _buildPost(post);
+                      },
+                      childCount: state.posts.length,
                     ),
-                  ),
+                  );
+                }
+                return SliverList(
+                  delegate: SliverChildListDelegate([]),
                 );
-              }
-              return SliverToBoxAdapter();
-            },
-          ),
-        ],
+              },
+            ),
+            BlocBuilder<PostCollectionBloc, PostCollectionState>(
+              builder: (context, state) {
+                if (state is PostCollectionLoadingState) {
+                  return SliverToBoxAdapter(
+                    child: Container(
+                      height: 100,
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    ),
+                  );
+                }
+                return SliverToBoxAdapter();
+              },
+            ),
+          ],
+        ),
+        onRefresh: () async {
+          postCollectionBloc.add(PostCollectionPullEvent(withReset: true));
+        },
       ),
     );
   }
@@ -70,7 +77,7 @@ class _HomeState extends State<Home> with MySnackBar {
   Widget _buildPost(PostDTO post) => Container(
         width: MediaQuery.of(context).size.width,
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
-        child:  Column(
+        child: Column(
           children: [
             Row(
               children: [

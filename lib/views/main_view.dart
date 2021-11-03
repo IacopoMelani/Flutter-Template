@@ -43,7 +43,7 @@ class _MainViewState extends State<MainView> {
             appBar: _buildAppBar(),
             body: _buildPageView(),
             bottomNavigationBar: _buildBottomAppBar(),
-            floatingActionButton: MediaQuery.of(context).viewInsets.bottom == 0 ? _buildFloatingActionButton() : null,
+            // floatingActionButton: MediaQuery.of(context).viewInsets.bottom == 0 ? _buildFloatingActionButton() : null,
             floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked),
       );
 
@@ -78,6 +78,7 @@ class _MainViewState extends State<MainView> {
 
   BottomAppBarWidget _buildBottomAppBar() => BottomAppBarWidget(items: _buildNavItemsButtons());
 
+  // ignore: unused_element
   FloatingActionButtonWidget _buildFloatingActionButton() => FloatingActionButtonWidget(
         onPressed: () {},
       );

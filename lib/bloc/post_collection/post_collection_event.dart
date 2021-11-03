@@ -1,6 +1,10 @@
 abstract class PostCollectionEvent {}
 
-class PostCollectionPullEvent extends PostCollectionEvent {}
+class PostCollectionPullEvent extends PostCollectionEvent {
+  final bool withReset;
+
+  PostCollectionPullEvent({this.withReset = false});
+}
 
 class PostCollectionResetEvent extends PostCollectionEvent {}
 

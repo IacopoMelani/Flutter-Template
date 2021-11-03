@@ -45,7 +45,11 @@ class PostCollectionBloc extends Bloc<PostCollectionEvent, PostCollectionState> 
   // MARK: events mapper
 
   Stream<PostCollectionState> _mapPostCollectionPullEventToState(PostCollectionPullEvent event) async* {
-    yield PostCollectionLoadingState(posts: this.state.posts);
+    if (event.withReset) {
+      yield PostCollectionLoadingState(posts: []);
+    } else {
+      yield PostCollectionLoadingState(posts: this.state.posts);
+    }
     yield* _pullPostAndCallback(event, null);
   }
 
