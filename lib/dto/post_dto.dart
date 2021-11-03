@@ -1,9 +1,14 @@
 class PostDTO {
+  final int id;
+  final int userId;
+  final String title;
+  final String body;
+
   PostDTO({
-    required int id,
-    required int userId,
-    required String title,
-    required String body,
+    required this.id,
+    required this.userId,
+    required this.title,
+    required this.body,
   });
 
   @override

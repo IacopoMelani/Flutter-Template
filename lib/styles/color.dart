@@ -49,11 +49,13 @@ class ColorApp {
       );
 
   static bool isDarkMode(BuildContext context) {
-    return AdaptiveTheme.of(context).mode.isDark;
+    return AdaptiveTheme.of(context).mode.isDark ||
+        (AdaptiveTheme.of(context).mode.isSystem && Brightness.dark == MediaQuery.of(context).platformBrightness);
   }
 
   static bool isLightMode(BuildContext context) {
-    return !isDarkMode(context);
+    return AdaptiveTheme.of(context).mode.isLight ||
+        (AdaptiveTheme.of(context).mode.isSystem && Brightness.light == MediaQuery.of(context).platformBrightness);
   }
 
   static Color floatingActionButtonColor(BuildContext context) {

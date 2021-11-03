@@ -40,12 +40,11 @@ class _MainViewState extends State<MainView> {
 
   Widget build(BuildContext ctx) => SafeArea(
         child: Scaffold(
-          appBar: _buildAppBar(),
-          body: _buildPageView(),
-          bottomNavigationBar: _buildBottomAppBar(),
-          floatingActionButton: MediaQuery.of(context).viewInsets.bottom == 0 ? _buildFloatingActionButton() : null,
-          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        ),
+            appBar: _buildAppBar(),
+            body: _buildPageView(),
+            bottomNavigationBar: _buildBottomAppBar(),
+            floatingActionButton: MediaQuery.of(context).viewInsets.bottom == 0 ? _buildFloatingActionButton() : null,
+            floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked),
       );
 
   // MARK: privates

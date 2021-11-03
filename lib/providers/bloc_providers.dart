@@ -6,6 +6,7 @@ import 'package:flutter_btmnavbar/bloc/config/config_event.dart';
 import 'package:flutter_btmnavbar/bloc/connectivity/connectivity_bloc.dart';
 import 'package:flutter_btmnavbar/bloc/login/login_bloc.dart';
 import 'package:flutter_btmnavbar/bloc/logout/logout_bloc.dart';
+import 'package:flutter_btmnavbar/bloc/post_collection/post_collection_bloc.dart';
 import 'package:flutter_btmnavbar/bloc/user_collection/user_collection_bloc.dart';
 import 'package:flutter_btmnavbar/managers/config_manager.dart';
 import 'package:flutter_btmnavbar/managers/connectivity_manager.dart';
@@ -67,6 +68,12 @@ class BlocProviders {
       // UserCollectionBloc
       BlocProvider<UserCollectionBloc>(
         create: (context) => UserCollectionBloc(
+          RepositoryProvider.of<FakeService>(context),
+        ),
+      ),
+      // PostCollectionBloc
+      BlocProvider<PostCollectionBloc>(
+        create: (context) => PostCollectionBloc(
           RepositoryProvider.of<FakeService>(context),
         ),
       ),
