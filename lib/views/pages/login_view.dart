@@ -5,6 +5,7 @@ import 'package:flutter_btmnavbar/bloc/auth/auth_state.dart';
 import 'package:flutter_btmnavbar/bloc/login/login_bloc.dart';
 import 'package:flutter_btmnavbar/bloc/login/login_event.dart';
 import 'package:flutter_btmnavbar/bloc/login/login_state.dart';
+import 'package:flutter_btmnavbar/managers/assets_manager.dart';
 import 'package:flutter_btmnavbar/mixins/snackbar.dart';
 import 'package:flutter_btmnavbar/services/auth_services.dart';
 import 'package:flutter_btmnavbar/styles/color.dart';
@@ -97,6 +98,7 @@ class _SignInFormState extends State<_SignInForm> with MySnackBar {
   }
 
   Widget _buildAuthForm() {
+    final assetsManager = RepositoryProvider.of<AssetsManager>(context);
     return Form(
       key: _formKey,
       autovalidateMode: _autoValidate ? AutovalidateMode.always : AutovalidateMode.disabled,
@@ -108,7 +110,7 @@ class _SignInFormState extends State<_SignInForm> with MySnackBar {
               child: Container(
                 width: 200,
                 height: 150,
-                child: Image.asset('assets/idflag.png'),
+                child: assetsManager.logo,
               ),
             ),
           ),
