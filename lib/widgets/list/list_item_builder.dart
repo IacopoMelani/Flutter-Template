@@ -14,11 +14,13 @@ class HeadingItem implements ListItem {
   HeadingItem({required this.title});
 
   @override
-  Widget buildTitle(BuildContext context) => Text(
-        title,
-        style: TextStyle(
-          fontSize: 18.0,
-          fontWeight: FontWeight.bold,
+  Widget buildTitle(BuildContext context) => Container(
+        child: Text(
+          title,
+          style: TextStyle(
+            fontSize: 18.0,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       );
 }
@@ -43,12 +45,15 @@ class MessageItem implements ListItem {
         child: Row(
           children: [
             Padding(
-              padding: EdgeInsets.only(left: 16),
+              padding: EdgeInsets.only(left: 4),
               child: Icon(icon),
             ),
             Padding(
               padding: EdgeInsets.only(left: 8),
-              child: Text(title),
+              child: Text(
+                title,
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
             ),
             Expanded(
               child: Row(
@@ -56,7 +61,7 @@ class MessageItem implements ListItem {
                 children: [
                   if (showChevronRight)
                     Padding(
-                      padding: EdgeInsets.only(right: 16),
+                      padding: EdgeInsets.only(right: 4),
                       child: Icon(Icons.chevron_right),
                     ),
                 ],

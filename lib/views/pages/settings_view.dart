@@ -1,4 +1,3 @@
-import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,6 +29,7 @@ class _SettingsState extends State<Settings> {
           itemBuilder: (context, index) {
             final item = _items[index];
             return ListTile(
+              dense: true,
               title: item.buildTitle(context),
             );
           },
@@ -54,39 +54,4 @@ class _SettingsState extends State<Settings> {
       ),
     );
   }
-
-  foffo() => Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                onPressed: () => setState(
-                  () => AdaptiveTheme.of(context).toggleThemeMode(),
-                ),
-                child: Text('Toggle theme'),
-              )
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text('Theme mode: '),
-              Text(AdaptiveTheme.of(context).mode.name),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              BlocBuilder<LogoutBloc, LogoutState>(
-                builder: (context, state) => ElevatedButton(
-                  onPressed: state is LogoutLoadingState ? null : _logout,
-                  child: Text('Logout'),
-                ),
-              )
-            ],
-          ),
-        ],
-      );
 }
