@@ -22,6 +22,8 @@ class ConfigManager {
     }
   }
 
+  bool get isConfigLoaded => _config != null;
+
   dynamic get defaultConfig => {
         "version": "0.0.0",
         "api": {},

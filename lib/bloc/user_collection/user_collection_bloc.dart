@@ -1,10 +1,10 @@
-import 'package:bloc/bloc.dart';
+import 'package:flutter_btmnavbar/bloc/my_bloc.dart';
 import 'package:flutter_btmnavbar/bloc/user_collection/user_collection_event.dart';
 import 'package:flutter_btmnavbar/bloc/user_collection/user_collection_state.dart';
 import 'package:flutter_btmnavbar/dto/user_dto.dart';
 import 'package:flutter_btmnavbar/services/fake_services.dart';
 
-class UserCollectionBloc extends Bloc<UserCollectionEvent, UserCollectionState> {
+class UserCollectionBloc extends MyBloc<UserCollectionEvent, UserCollectionState> {
   final FakeService _service;
 
   UserCollectionBloc(this._service) : super(UserCollectionInitialState(users: []));
@@ -45,8 +45,10 @@ class UserCollectionBloc extends Bloc<UserCollectionEvent, UserCollectionState> 
   // MARK: events mapper
 
   Stream<UserCollectionState> _mapUserCollectionPullEventToState(UserCollectionPullEvent event) async* {
-    yield UserCollectionLoadingState(users: this.state.users);
-    yield* _pullUsersAndCallback(event, null);
+    yield* withConnectivity(() async* {
+      yield UserCollectionLoadingState(users: this.state.users);
+      yield* _pullUsersAndCallback(event, null);
+    });
   }
 
   Stream<UserCollectionState> _mapUserCollectionResetEventToState(UserCollectionResetEvent event) async* {
@@ -55,9 +57,11 @@ class UserCollectionBloc extends Bloc<UserCollectionEvent, UserCollectionState> 
   }
 
   Stream<UserCollectionState> _mapUserCollectionSearchEventToState(UserCollectionSearchEvent event) async* {
-    yield UserCollectionLoadingState(users: this.state.users);
-    yield* _pullUsersAndCallback(event, (List<UserDTO> users) {
-      return users.where((user) => user.name.toLowerCase().contains(event.query.toLowerCase())).toList();
+    yield* withConnectivity(() async* {
+      yield UserCollectionLoadingState(users: this.state.users);
+      yield* _pullUsersAndCallback(event, (List<UserDTO> users) {
+        return users.where((user) => user.name.toLowerCase().contains(event.query.toLowerCase())).toList();
+      });
     });
   }
 }

@@ -19,5 +19,5 @@ class PostCollectionSuccessState extends PostCollectionState {
 }
 
 class PostCollectionFailedState extends PostCollectionState {
-  PostCollectionFailedState({required String error, required PostDTOs users}) : super(posts: users);
+  PostCollectionFailedState({required String error, required PostDTOs posts}) : super(posts: posts);
 }
