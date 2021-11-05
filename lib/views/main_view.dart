@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_btmnavbar/styles/color.dart';
 import 'package:flutter_btmnavbar/widgets/inputs/floating_action_button_widget.dart';
+import 'package:flutter_btmnavbar/widgets/navigations/app_bar_widget.dart';
 import 'package:flutter_btmnavbar/widgets/navigations/bottom_app_bar_widget.dart';
 import 'package:flutter_btmnavbar/widgets/navigations/page_view_widget.dart';
 
@@ -69,14 +70,9 @@ class _MainViewState extends State<MainView> {
 
   // MARK: private builders
 
-  AppBar _buildAppBar() => AppBar(
-        centerTitle: true,
-        title: Text(
-          'Bottom Nav Bar',
-        ),
-      );
+  PreferredSizeWidget _buildAppBar() => MyAppBar(title: "Flutter Template");
 
-  BottomAppBarWidget _buildBottomAppBar() => BottomAppBarWidget(items: _buildNavItemsButtons());
+  MyBottomAppBar _buildBottomAppBar() => MyBottomAppBar(items: _buildNavItemsButtons());
 
   // ignore: unused_element
   FloatingActionButtonWidget _buildFloatingActionButton() => FloatingActionButtonWidget(

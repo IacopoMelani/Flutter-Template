@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class BottomAppBarWidget extends StatelessWidget {
+class MyBottomAppBar extends StatelessWidget {
   final List<Widget> items;
 
-  const BottomAppBarWidget({Key? key, required this.items}) : super(key: key);
+  const MyBottomAppBar({Key? key, required this.items}) : super(key: key);
 
   @override
   Widget build(BuildContext context) => BottomAppBar(
