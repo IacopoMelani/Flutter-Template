@@ -7,6 +7,7 @@ import 'package:flutter_btmnavbar/bloc/logout/logout_event.dart';
 import 'package:flutter_btmnavbar/bloc/logout/logout_state.dart';
 import 'package:flutter_btmnavbar/styles/color.dart';
 import 'package:flutter_btmnavbar/views/settings/theme_view.dart';
+import 'package:flutter_btmnavbar/widgets/list/list_item_builder.dart';
 
 class Settings extends StatefulWidget {
   const Settings({Key? key}) : super(key: key);
@@ -17,10 +18,10 @@ class Settings extends StatefulWidget {
 
 class _SettingsState extends State<Settings> {
   late List<ListItem> _items = [
-    HeadingItem('Settings'),
-    MessageItem('Theme', ColorApp.isDarkMode(context) ? CupertinoIcons.sun_max_fill : CupertinoIcons.moon_fill, _pushThemeView),
-    HeadingItem('Other'),
-    MessageItem('Logout', Icons.exit_to_app, _logout),
+    HeadingItem(title: 'Settings'),
+    MessageItem(title: 'Theme', icon: ColorApp.isDarkMode(context) ? CupertinoIcons.sun_max_fill : CupertinoIcons.moon_fill, onTap: _pushThemeView),
+    HeadingItem(title: 'Other'),
+    MessageItem(title: 'Logout', icon: Icons.exit_to_app, onTap: _logout),
   ];
 
   @override
@@ -87,55 +88,5 @@ class _SettingsState extends State<Settings> {
             ],
           ),
         ],
-      );
-}
-
-/// The base class for the different types of items the list can contain.
-abstract class ListItem {
-  /// The title line to show in a list item.
-  Widget buildTitle(BuildContext context);
-}
-
-/// A ListItem that contains data to display a heading.
-class HeadingItem implements ListItem {
-  final String heading;
-
-  HeadingItem(this.heading);
-
-  @override
-  Widget buildTitle(BuildContext context) {
-    return Text(
-      heading,
-      style: TextStyle(
-        fontSize: 18.0,
-        fontWeight: FontWeight.bold,
-      ),
-    );
-  }
-}
-
-/// A ListItem that contains data to display a message.
-class MessageItem implements ListItem {
-  final String sender;
-  final IconData icon;
-  final void Function()? onTap;
-
-  MessageItem(this.sender, this.icon, this.onTap);
-
-  @override
-  Widget buildTitle(BuildContext context) => GestureDetector(
-        onTap: this.onTap,
-        child: Row(
-          children: [
-            Padding(
-              padding: EdgeInsets.only(left: 16),
-              child: Icon(icon),
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 8),
-              child: Text(sender),
-            ),
-          ],
-        ),
       );
 }
