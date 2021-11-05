@@ -34,7 +34,7 @@ class _LoginViewState extends State<LoginView> with MySnackBar {
                 showError(context, state.message);
                 return _AuthForm();
               }
-              return MyCircularProgressIndicatorView();
+              return Container();
             },
           ),
         ),

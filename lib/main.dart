@@ -17,7 +17,7 @@ import 'package:flutter_btmnavbar/providers/service_providers.dart';
 import 'package:flutter_btmnavbar/styles/color.dart';
 import 'package:flutter_btmnavbar/views/main_view.dart';
 import 'package:flutter_btmnavbar/views/pages/login_view.dart';
-import 'package:flutter_btmnavbar/widgets/loadings/circular_progress_indicator_view.dart';
+import 'package:flutter_btmnavbar/widgets/loadings/splash_screen.dart';
 
 void main() {
   runApp(
@@ -59,12 +59,14 @@ class _AppState extends State<App> with MySnackBar {
         title: appTitle,
         theme: light,
         darkTheme: dark,
-        home: _buildRoot(context),
+        home: SplashScreen(
+          viewOnLoad: _buildRoot(),
+        ),
       ),
     );
   }
 
-  Widget _buildRoot(BuildContext context) => BlocListener<ConnectivityBloc, ConnectivityState>(
+  Widget _buildRoot() => BlocListener<ConnectivityBloc, ConnectivityState>(
         listener: (context, state) {
           if (state is ConnectivityOfflineState) {
             showError(context, 'Internet connection issue');
@@ -77,16 +79,16 @@ class _AppState extends State<App> with MySnackBar {
           builder: (context, configState) {
             if (configState is ConfigLoadedState) {
               return BlocBuilder<AuthBloc, AuthState>(
-                builder: (context, authState) => _buildView(context, authState),
+                builder: (context, authState) => _buildView(authState),
               );
             } else {
-              return MyCircularProgressIndicatorView();
+              return Container();
             }
           },
         ),
       );
 
-  Widget _buildView(BuildContext context, AuthState state) {
+  Widget _buildView(AuthState state) {
     final view = state is AuthAuthenticatedState ? MainView() : LoginView();
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),

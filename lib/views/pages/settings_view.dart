@@ -30,6 +30,7 @@ class _SettingsState extends State<Settings> {
             final item = _items[index];
             return ListTile(
               dense: true,
+              onTap: item.onTapHandler(),
               title: item.buildTitle(context),
             );
           },

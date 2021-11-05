@@ -5,6 +5,9 @@ import 'package:flutter/widgets.dart';
 abstract class ListItem {
   /// The title line to show in a list item.
   Widget buildTitle(BuildContext context);
+
+  /// Return the eventually onTap callback for the list item.
+  void Function()? onTapHandler();
 }
 
 /// A ListItem that contains data to display a heading.
@@ -23,6 +26,9 @@ class HeadingItem implements ListItem {
           ),
         ),
       );
+
+  @override
+  void Function()? onTapHandler() => null;
 }
 
 /// A ListItem that contains data to display a message.
@@ -40,8 +46,7 @@ class MessageItem implements ListItem {
   });
 
   @override
-  Widget buildTitle(BuildContext context) => GestureDetector(
-        onTap: this.onTap,
+  Widget buildTitle(BuildContext context) => Container(
         child: Row(
           children: [
             Padding(
@@ -70,4 +75,7 @@ class MessageItem implements ListItem {
           ],
         ),
       );
+
+  @override
+  void Function()? onTapHandler() => onTap;
 }
