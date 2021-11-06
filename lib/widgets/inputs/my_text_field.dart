@@ -59,7 +59,7 @@ class _MyTextFieldState extends State<MyTextField> {
             prefixIcon: this.widget.prefixIcon != null ? this.widget.prefixIcon : null,
             suffixIcon: this.widget.suffixIcon != null ? this.widget.suffixIcon : null,
             border: OutlineInputBorder(
-              borderRadius: this.widget.type == TextFieldType.search ? BorderRadius.circular(10) : BorderRadius.circular(4),
+              borderRadius: BorderRadius.circular(4),
             ),
           ),
         )
@@ -77,7 +77,7 @@ class _MyTextFieldState extends State<MyTextField> {
             prefixIcon: this.widget.prefixIcon != null ? this.widget.prefixIcon : null,
             suffixIcon: this.widget.suffixIcon != null ? this.widget.suffixIcon : null,
             border: OutlineInputBorder(
-              borderRadius: this.widget.type == TextFieldType.search ? BorderRadius.circular(10) : BorderRadius.circular(4),
+              borderRadius: BorderRadius.circular(4),
             ),
           ),
         );

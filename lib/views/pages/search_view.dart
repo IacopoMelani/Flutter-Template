@@ -6,14 +6,14 @@ import 'package:flutter_btmnavbar/bloc/user_collection/user_collection_state.dar
 import 'package:flutter_btmnavbar/mixins/snackbar.dart';
 import 'package:flutter_btmnavbar/widgets/inputs/my_text_field.dart';
 
-class Search extends StatefulWidget {
-  const Search({Key? key}) : super(key: key);
+class SearchView extends StatefulWidget {
+  const SearchView({Key? key}) : super(key: key);
 
   @override
-  _SearchState createState() => _SearchState();
+  _SearchViewState createState() => _SearchViewState();
 }
 
-class _SearchState extends State<Search> with MySnackBar {
+class _SearchViewState extends State<SearchView> with MySnackBar {
   @override
   Widget build(BuildContext context) {
     final userCollectionBloc = BlocProvider.of<UserCollectionBloc>(context);

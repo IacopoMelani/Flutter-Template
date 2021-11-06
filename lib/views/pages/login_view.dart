@@ -90,14 +90,14 @@ class _SignInFormState extends State<_SignInForm> with MySnackBar {
             return MyCircularProgressIndicatorView();
           }
           return SingleChildScrollView(
-            child: _buildAuthForm(),
+            child: _buildAuthForm(context),
           );
         },
       ),
     );
   }
 
-  Widget _buildAuthForm() {
+  Widget _buildAuthForm(BuildContext context) {
     final assetsManager = RepositoryProvider.of<AssetsManager>(context);
     return Form(
       key: _formKey,
@@ -121,7 +121,7 @@ class _SignInFormState extends State<_SignInForm> with MySnackBar {
               top: 30.0,
               bottom: 0,
             ),
-            child: _buildEmailInput(),
+            child: _buildEmailInput(context),
           ),
           Padding(
             padding: const EdgeInsets.only(
@@ -130,7 +130,7 @@ class _SignInFormState extends State<_SignInForm> with MySnackBar {
               top: 25.0,
               bottom: 0,
             ),
-            child: _buildPasswordInput(),
+            child: _buildPasswordInput(context),
           ),
           SizedBox(
             height: 45,
@@ -153,7 +153,7 @@ class _SignInFormState extends State<_SignInForm> with MySnackBar {
     );
   }
 
-  Widget _buildEmailInput() => MyTextField(
+  Widget _buildEmailInput(BuildContext context) => MyTextField(
         labelText: "Email",
         controller: _emailController,
         keyboardType: TextInputType.emailAddress,
@@ -162,7 +162,7 @@ class _SignInFormState extends State<_SignInForm> with MySnackBar {
         validator: (value) => value == null || value == "" ? "Email is required" : null,
       );
 
-  Widget _buildPasswordInput() => MyTextField(
+  Widget _buildPasswordInput(BuildContext context) => MyTextField(
         labelText: 'Password',
         controller: _passwordController,
         hintText: 'Enter password',

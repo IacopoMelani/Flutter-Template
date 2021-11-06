@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_btmnavbar/styles/color.dart';
+import 'package:flutter_btmnavbar/views/pages/bookmark_view.dart';
+import 'package:flutter_btmnavbar/views/pages/home_view.dart';
+import 'package:flutter_btmnavbar/views/pages/search_view.dart';
+import 'package:flutter_btmnavbar/views/pages/settings_view.dart';
 import 'package:flutter_btmnavbar/widgets/inputs/floating_action_button_widget.dart';
 import 'package:flutter_btmnavbar/widgets/navigations/app_bar_widget.dart';
 import 'package:flutter_btmnavbar/widgets/navigations/bottom_app_bar_widget.dart';
 import 'package:flutter_btmnavbar/widgets/navigations/page_view_widget.dart';
-
-import 'pages/home_view.dart' as homeView;
-import 'pages/search_view.dart' as _searchView;
-import 'pages/bookmark_view.dart' as bookmarkView;
-import 'pages/settings_view.dart' as SettingsView;
 
 //Main view
 class MainView extends StatefulWidget {
@@ -33,17 +32,17 @@ class _MainViewState extends State<MainView> {
   PageController _navPage = PageController(initialPage: 0);
 
   final List<Widget> navItems = [
-    new homeView.Home(),
-    new _searchView.Search(),
-    new bookmarkView.Bookmark(),
-    new SettingsView.Settings(),
+    HomeView(),
+    SearchView(),
+    BookmarkView(),
+    SettingsView(),
   ];
 
-  Widget build(BuildContext ctx) => SafeArea(
+  Widget build(BuildContext context) => SafeArea(
         child: Scaffold(
-            appBar: _buildAppBar(),
-            body: _buildPageView(),
-            bottomNavigationBar: _buildBottomAppBar(),
+            appBar: _buildAppBar(context),
+            body: _buildPageView(context),
+            bottomNavigationBar: _buildBottomAppBar(context),
             // floatingActionButton: MediaQuery.of(context).viewInsets.bottom == 0 ? _buildFloatingActionButton() : null,
             floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked),
       );
@@ -70,16 +69,16 @@ class _MainViewState extends State<MainView> {
 
   // MARK: private builders
 
-  PreferredSizeWidget _buildAppBar() => MyAppBar(title: "Flutter Template");
+  PreferredSizeWidget _buildAppBar(BuildContext context) => MyAppBar(title: "Flutter Template");
 
-  MyBottomAppBar _buildBottomAppBar() => MyBottomAppBar(items: _buildNavItemsButtons());
+  MyBottomAppBar _buildBottomAppBar(BuildContext context) => MyBottomAppBar(items: _buildNavItemsButtons(context));
 
   // ignore: unused_element
-  FloatingActionButtonWidget _buildFloatingActionButton() => FloatingActionButtonWidget(
+  FloatingActionButtonWidget _buildFloatingActionButton(BuildContext context) => FloatingActionButtonWidget(
         onPressed: () {},
       );
 
-  List<Widget> _buildNavItemsButtons() => [
+  List<Widget> _buildNavItemsButtons(BuildContext context) => [
         IconButton(
           iconSize: iconSize,
           icon: Icon(Icons.home, color: _iconColor(context: context, pageIndex: homePageIndex)),
@@ -102,7 +101,7 @@ class _MainViewState extends State<MainView> {
         ),
       ];
 
-  PageViewWidget _buildPageView() => PageViewWidget(
+  PageViewWidget _buildPageView(BuildContext context) => PageViewWidget(
         pageController: _navPage,
         pages: navItems,
       );

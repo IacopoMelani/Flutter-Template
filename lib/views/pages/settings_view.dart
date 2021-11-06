@@ -8,14 +8,14 @@ import 'package:flutter_btmnavbar/styles/color.dart';
 import 'package:flutter_btmnavbar/views/settings/theme_view.dart';
 import 'package:flutter_btmnavbar/widgets/list/list_item_builder.dart';
 
-class Settings extends StatefulWidget {
-  const Settings({Key? key}) : super(key: key);
+class SettingsView extends StatefulWidget {
+  const SettingsView({Key? key}) : super(key: key);
 
   @override
-  _SettingsState createState() => _SettingsState();
+  _SettingsViewState createState() => _SettingsViewState();
 }
 
-class _SettingsState extends State<Settings> {
+class _SettingsViewState extends State<SettingsView> {
   late List<ListItem> _items = [
     HeadingItem(title: 'Settings'),
     MessageItem(title: 'Theme', icon: ColorApp.isDarkMode(context) ? CupertinoIcons.sun_max_fill : CupertinoIcons.moon_fill, onTap: _pushThemeView),

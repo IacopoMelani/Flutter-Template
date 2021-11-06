@@ -60,13 +60,13 @@ class _AppState extends State<App> with MySnackBar {
         theme: light,
         darkTheme: dark,
         home: SplashScreen(
-          viewOnLoad: _buildRoot(),
+          viewOnLoad: _buildRoot(context),
         ),
       ),
     );
   }
 
-  Widget _buildRoot() => BlocListener<ConnectivityBloc, ConnectivityState>(
+  Widget _buildRoot(BuildContext context) => BlocListener<ConnectivityBloc, ConnectivityState>(
         listener: (context, state) {
           if (state is ConnectivityOfflineState) {
             showError(context, 'Internet connection issue');
@@ -79,7 +79,7 @@ class _AppState extends State<App> with MySnackBar {
           builder: (context, configState) {
             if (configState is ConfigLoadedState) {
               return BlocBuilder<AuthBloc, AuthState>(
-                builder: (context, authState) => _buildView(authState),
+                builder: (context, authState) => _buildView(context, authState),
               );
             } else {
               return Container();
@@ -88,7 +88,7 @@ class _AppState extends State<App> with MySnackBar {
         ),
       );
 
-  Widget _buildView(AuthState state) {
+  Widget _buildView(BuildContext context, AuthState state) {
     final view = state is AuthAuthenticatedState ? MainView() : LoginView();
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),

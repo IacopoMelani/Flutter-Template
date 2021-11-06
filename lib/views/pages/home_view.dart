@@ -6,14 +6,14 @@ import 'package:flutter_btmnavbar/bloc/post_collection/post_collection_state.dar
 import 'package:flutter_btmnavbar/dto/post_dto.dart';
 import 'package:flutter_btmnavbar/mixins/snackbar.dart';
 
-class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+class HomeView extends StatefulWidget {
+  const HomeView({Key? key}) : super(key: key);
 
   @override
-  _HomeState createState() => _HomeState();
+  _HomeViewState createState() => _HomeViewState();
 }
 
-class _HomeState extends State<Home> with MySnackBar {
+class _HomeViewState extends State<HomeView> with MySnackBar {
   @override
   Widget build(BuildContext context) {
     final postCollectionBloc = BlocProvider.of<PostCollectionBloc>(context);
@@ -39,7 +39,7 @@ class _HomeState extends State<Home> with MySnackBar {
                         if (state.posts.length - 10 == index) {
                           postCollectionBloc.add(PostCollectionPullEvent());
                         }
-                        return _buildPost(post);
+                        return _buildPost(context, post);
                       },
                       childCount: state.posts.length,
                     ),
@@ -74,7 +74,7 @@ class _HomeState extends State<Home> with MySnackBar {
     );
   }
 
-  Widget _buildPost(PostDTO post) => Container(
+  Widget _buildPost(BuildContext context, PostDTO post) => Container(
         width: MediaQuery.of(context).size.width,
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
         child: Column(
