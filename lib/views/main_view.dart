@@ -57,8 +57,7 @@ class _MainViewState extends State<MainView> {
     }
   }
 
-  Color _iconColor({required BuildContext context, pageIndex: int}) =>
-      _isPagePressed(pageIndex: pageIndex) ? ColorApp.iconPressed(context) : ColorApp.iconUnpressed(context);
+  Color? _iconColor({required BuildContext context, pageIndex: int}) => _isPagePressed(pageIndex: pageIndex) ? ColorApp.iconPressed(context) : null;
 
   void _navItemClicked({pageIndex: int}) {
     setState(() {
@@ -81,22 +80,34 @@ class _MainViewState extends State<MainView> {
   List<Widget> _buildNavItemsButtons(BuildContext context) => [
         IconButton(
           iconSize: iconSize,
-          icon: Icon(Icons.home, color: _iconColor(context: context, pageIndex: homePageIndex)),
+          icon: Icon(
+            Icons.home,
+            color: _iconColor(context: context, pageIndex: homePageIndex),
+          ),
           onPressed: () => _navItemClicked(pageIndex: homePageIndex),
         ),
         IconButton(
           iconSize: iconSize,
-          icon: Icon(Icons.search, color: _iconColor(context: context, pageIndex: searchPageIndex)),
+          icon: Icon(
+            Icons.search,
+            color: _iconColor(context: context, pageIndex: searchPageIndex),
+          ),
           onPressed: () => _navItemClicked(pageIndex: searchPageIndex),
         ),
         IconButton(
           iconSize: iconSize,
-          icon: Icon(Icons.bookmark, color: _iconColor(context: context, pageIndex: bookmarkPageIndex)),
+          icon: Icon(
+            Icons.bookmark,
+            color: _iconColor(context: context, pageIndex: bookmarkPageIndex),
+          ),
           onPressed: () => _navItemClicked(pageIndex: bookmarkPageIndex),
         ),
         IconButton(
           iconSize: iconSize,
-          icon: Icon(Icons.settings, color: _iconColor(context: context, pageIndex: settingsPageIndex)),
+          icon: Icon(
+            Icons.settings,
+            color: _iconColor(context: context, pageIndex: settingsPageIndex),
+          ),
           onPressed: () => _navItemClicked(pageIndex: settingsPageIndex),
         ),
       ];
