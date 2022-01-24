@@ -4,6 +4,7 @@ import 'package:flutter_btmnavbar/bloc/user_collection/user_collection_bloc.dart
 import 'package:flutter_btmnavbar/bloc/user_collection/user_collection_event.dart';
 import 'package:flutter_btmnavbar/bloc/user_collection/user_collection_state.dart';
 import 'package:flutter_btmnavbar/mixins/snackbar.dart';
+import 'package:flutter_btmnavbar/providers/inherited_data_provider.dart';
 import 'package:flutter_btmnavbar/widgets/inputs/my_text_field.dart';
 
 class SearchView extends StatefulWidget {
@@ -27,6 +28,7 @@ class _SearchViewState extends State<SearchView> with MySnackBar {
         }
       },
       child: CustomScrollView(
+        controller: InheritedDataProvider.of(context).scrollController,
         slivers: [
           SliverAppBar(
             floating: true,

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_btmnavbar/bloc/logout/logout_bloc.dart';
 import 'package:flutter_btmnavbar/bloc/logout/logout_event.dart';
 import 'package:flutter_btmnavbar/bloc/logout/logout_state.dart';
+import 'package:flutter_btmnavbar/providers/inherited_data_provider.dart';
 import 'package:flutter_btmnavbar/styles/color.dart';
 import 'package:flutter_btmnavbar/views/settings/theme_view.dart';
 import 'package:flutter_btmnavbar/widgets/list/list_item_builder.dart';
@@ -26,6 +27,7 @@ class _SettingsViewState extends State<SettingsView> {
   @override
   Widget build(BuildContext context) => new Center(
         child: ListView.builder(
+          controller: InheritedDataProvider.of(context).scrollController,
           itemBuilder: (context, index) {
             final item = _items[index];
             return ListTile(

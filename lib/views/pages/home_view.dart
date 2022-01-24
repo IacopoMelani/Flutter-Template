@@ -5,6 +5,7 @@ import 'package:flutter_btmnavbar/bloc/post_collection/post_collection_event.dar
 import 'package:flutter_btmnavbar/bloc/post_collection/post_collection_state.dart';
 import 'package:flutter_btmnavbar/dto/post_dto.dart';
 import 'package:flutter_btmnavbar/mixins/snackbar.dart';
+import 'package:flutter_btmnavbar/providers/inherited_data_provider.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -28,6 +29,7 @@ class _HomeViewState extends State<HomeView> with MySnackBar {
       },
       child: RefreshIndicator(
         child: CustomScrollView(
+          controller: InheritedDataProvider.of(context).scrollController,
           slivers: [
             BlocBuilder<PostCollectionBloc, PostCollectionState>(
               builder: (context, state) {

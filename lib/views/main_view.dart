@@ -1,13 +1,12 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_btmnavbar/styles/color.dart';
 import 'package:flutter_btmnavbar/views/pages/bookmark_view.dart';
 import 'package:flutter_btmnavbar/views/pages/home_view.dart';
 import 'package:flutter_btmnavbar/views/pages/search_view.dart';
 import 'package:flutter_btmnavbar/views/pages/settings_view.dart';
 import 'package:flutter_btmnavbar/widgets/inputs/floating_action_button_widget.dart';
 import 'package:flutter_btmnavbar/widgets/navigations/app_bar_widget.dart';
-import 'package:flutter_btmnavbar/widgets/navigations/bottom_app_bar_widget.dart';
-import 'package:flutter_btmnavbar/widgets/navigations/page_view_widget.dart';
+import 'package:flutter_btmnavbar/widgets/navigations/floating_bottom_app_bar_widget.dart';
 
 //Main view
 class MainView extends StatefulWidget {
@@ -18,102 +17,78 @@ class MainView extends StatefulWidget {
 }
 
 //State<StatefulWidget> action method
-class _MainViewState extends State<MainView> {
+class _MainViewState extends State<MainView> with SingleTickerProviderStateMixin {
   final homePageIndex = 0;
   final searchPageIndex = 1;
   final bookmarkPageIndex = 2;
   final settingsPageIndex = 3;
 
-  final double iconSize = 30;
-
-  int _currentPage = 0;
-
-  //Page controller
-  PageController _navPage = PageController(initialPage: 0);
-
+  late int currentPage;
+  late TabController tabController;
+  final List<Color> colors = [Colors.red, Colors.yellow, Colors.green, Colors.blue, Colors.pink];
   final List<Widget> navItems = [
+    HomeView(),
     HomeView(),
     SearchView(),
     BookmarkView(),
     SettingsView(),
   ];
 
+  @override
+  void initState() {
+    currentPage = 0;
+    tabController = TabController(length: 5, vsync: this);
+    tabController.animation!.addListener(
+      () {
+        final value = tabController.animation!.value.round();
+        if (value != currentPage && mounted) {
+          changePage(value);
+        }
+      },
+    );
+    super.initState();
+  }
+
+  void changePage(int newPage) {
+    setState(() {
+      currentPage = newPage;
+    });
+  }
+
+  @override
+  void dispose() {
+    tabController.dispose();
+    super.dispose();
+  }
+
   Widget build(BuildContext context) => SafeArea(
         child: Scaffold(
             appBar: _buildAppBar(context),
-            body: _buildPageView(context),
-            bottomNavigationBar: _buildBottomAppBar(context),
+            body: FloatingBottomAppBar(
+              currentPage: currentPage,
+              tabController: tabController,
+              colors: colors,
+              unselectedColor: Colors.white,
+              barColor: Colors.black,
+              start: 10,
+              end: 2,
+              child: TabBarView(
+                controller: tabController,
+                dragStartBehavior: DragStartBehavior.down,
+                physics: const BouncingScrollPhysics(),
+                children: navItems,
+              ),
+            ),
             // floatingActionButton: MediaQuery.of(context).viewInsets.bottom == 0 ? _buildFloatingActionButton() : null,
             floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked),
       );
-
-  // MARK: privates
-
-  bool _isPagePressed({pageIndex: int}) {
-    if (_currentPage == pageIndex) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  Color? _iconColor({required BuildContext context, pageIndex: int}) => _isPagePressed(pageIndex: pageIndex) ? ColorApp.iconPressed(context) : null;
-
-  void _navItemClicked({pageIndex: int}) {
-    setState(() {
-      _currentPage = pageIndex;
-      _navPage.jumpToPage(pageIndex);
-    });
-  }
 
   // MARK: private builders
 
   PreferredSizeWidget _buildAppBar(BuildContext context) => MyAppBar(title: "Flutter Template");
 
-  MyBottomAppBar _buildBottomAppBar(BuildContext context) => MyBottomAppBar(items: _buildNavItemsButtons(context));
-
   // ignore: unused_element
   FloatingActionButtonWidget _buildFloatingActionButton(BuildContext context) => FloatingActionButtonWidget(
         onPressed: () {},
-      );
-
-  List<Widget> _buildNavItemsButtons(BuildContext context) => [
-        IconButton(
-          iconSize: iconSize,
-          icon: Icon(
-            Icons.home,
-            color: _iconColor(context: context, pageIndex: homePageIndex),
-          ),
-          onPressed: () => _navItemClicked(pageIndex: homePageIndex),
-        ),
-        IconButton(
-          iconSize: iconSize,
-          icon: Icon(
-            Icons.search,
-            color: _iconColor(context: context, pageIndex: searchPageIndex),
-          ),
-          onPressed: () => _navItemClicked(pageIndex: searchPageIndex),
-        ),
-        IconButton(
-          iconSize: iconSize,
-          icon: Icon(
-            Icons.bookmark,
-            color: _iconColor(context: context, pageIndex: bookmarkPageIndex),
-          ),
-          onPressed: () => _navItemClicked(pageIndex: bookmarkPageIndex),
-        ),
-        IconButton(
-          iconSize: iconSize,
-          icon: Icon(
-            Icons.settings,
-            color: _iconColor(context: context, pageIndex: settingsPageIndex),
-          ),
-          onPressed: () => _navItemClicked(pageIndex: settingsPageIndex),
-        ),
-      ];
-
-  PageViewWidget _buildPageView(BuildContext context) => PageViewWidget(
-        pageController: _navPage,
-        pages: navItems,
       );
 }
